@@ -1,0 +1,114 @@
+#homeBody {
+  display: flex;
+  justify-content: center;
+}
+
+body.loading {
+  opacity: 0.5;
+  pointer-events: none; /* 使用者不能點擊 */
+}
+
+body.loading::after {
+  content: "讀取中...";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #0003;
+}
+
+#metadataList {
+  width: 50%;
+}
+.item {
+  margin-bottom: 10px;
+}
+.title {
+  cursor: pointer;
+  padding: 10px;
+  background: #eee;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+}
+
+.arrow {
+  justify-self: end;
+}
+
+.content {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.guideHint {
+  text-align: right;
+}
+
+.item input {
+  height: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+#backToIndex {
+    margin: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: none;
+    background: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+#app {
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+    font-family: sans-serif;
+}
+
+.imageBox {
+    display: flex;
+    flex-wrap: wrap;      
+    gap: 10px;             
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.questionImage {
+    width: 50vw;    
+    height: auto;   
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+
+.btnBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056cc;
+}

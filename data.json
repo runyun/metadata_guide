@@ -1,0 +1,21 @@
+{
+    "type": "title",
+    "questions": {
+        "1": { 
+            "text": "這本書的封面有書名嗎？",
+            "images": ["images/title_1.png"],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "2" }
+            ]
+        },
+        "2": {
+            "text": "書的版心有寫書名嗎？",
+            "images": ["images/title_2.png"],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "pass" }
+            ]
+        }
+    }
+}
