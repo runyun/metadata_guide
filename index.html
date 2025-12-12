@@ -9,61 +9,9 @@
     <title>Guide - Home</title>
 </head>
 <body id="homeBody">
-    <div id="metadataList">
+    <div id="metadataList"></div>
 
-        <div class="item">
-            <div class="title">
-                譜名
-                <input type="text" id="titleResult" placeholder="請輸入譜名">
-                <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
-            </div>
-            <div class="content">
-                定義
-                <div class="guideHint">
-                    <a href="guide.html">開始導覽 ▶</a>
-                </div>
-            </div>
-        </div>
-    
-        <div class="item">
-            <div class="title">
-                姓氏
-                <input type="text" id="surnameResult" placeholder="請輸入譜名">
-                <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
-            </div>
-            <div class="content">
-                定義
-                <div class="guideHint">
-                    <a href="guide.html">開始導覽 ▶</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="title">
-                總卷數
-                <input type="text" id="volumeResult" placeholder="請輸入總卷數">
-                <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
-            </div>
-            <div class="content">
-                定義
-                <div class="guideHint">
-                    <a href="guide.html">開始導覽 ▶</a>
-                </div>
-            </div>
-        </div>
-    </div>
    
     <script src="js/base.js"></script>
-    <script>
-        const params = new URLSearchParams(location.search);
-        const type = params.get("type");
-        const value = params.get("value");
-
-        if (type) {
-            console.log(type, value);
-            document.getElementById(type + "Result").value = value;
-        }
-    </script>
 </body>
 </html>

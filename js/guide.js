@@ -1,8 +1,11 @@
-// 啟動
 load();
 
+function backToIndex(type, value) {
+  window.location.href = "index.html?type=" + type + "&value=" + value;
+}
+
 async function load() {
-    const r = await fetch("data.json");
+    const r = await fetch("../json/questions.json");
     const data = await r.json();
     startRender(data);
 }
@@ -22,26 +25,6 @@ function renderQuestion(data, id) {
     const title = document.createElement("h2");
     title.textContent = q.text;
     app.appendChild(title);
-
-    // 圖片區
-    if (q.images && q.images.length > 0) {
-        const imgBox = document.createElement("div");
-
-        const example = document.createElement("p");
-        
-        example.textContent = "範例圖片：";
-        app.appendChild(example);
-        imgBox.className = "imageBox";
-
-        q.images.forEach(src => {
-            const img = document.createElement("img");
-            img.src = src;
-            img.className = "questionImage";
-            imgBox.appendChild(img);
-        });
-
-        app.appendChild(imgBox);
-    }
 
     // 答案按鈕
     const btnBox = document.createElement("div");
@@ -67,6 +50,27 @@ function renderQuestion(data, id) {
     });
 
     app.appendChild(btnBox);
+
+    // 圖片區
+    if (q.images && q.images.length > 0) {
+        const imgBox = document.createElement("div");
+
+        const example = document.createElement("p");
+        
+        example.textContent = "範例圖片：";
+        app.appendChild(example);
+        imgBox.className = "imageBox";
+
+        q.images.forEach(src => {
+            const img = document.createElement("img");
+            img.src = src;
+            img.className = "questionImage";
+            imgBox.appendChild(img);
+        });
+
+        app.appendChild(imgBox);
+    }
+
 }
 
 function showDone() {
