@@ -13,7 +13,7 @@
             "images": ["images/title_2.png"],
             "answers": [
                 { "text": "有"},
-                { "text": "沒有", "next": "pass" }
+                { "text": "沒有(結束)", "next": "pass" }
             ]
         }
     }

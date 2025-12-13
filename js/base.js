@@ -2,7 +2,8 @@ const data = {
     "columns" : [
         { "name": "title",
           "display": "譜名",
-          "explain": "家譜的書名" }
+          "explain": "家譜的書名",
+          "placeIndexes": [0, 1, 5] }
         ,{ "name": "sub_title",
           "display": "副譜名",
           "explain": "輔助譜名，增加辨識度" }
@@ -39,6 +40,19 @@ const data = {
     ]
 };
 
+const allPlaces = [
+  "封面" // 0
+  , "版心"
+  , "目錄"
+  , "序言"
+  , "書名頁" // 4
+  , "版權頁"
+  , "後記/跋"
+  , "世系圖"
+  , "世傳"
+  , "修譜名錄" // 9
+];
+
 function toggleContent(event) {
   event.stopPropagation(); 
 
@@ -69,10 +83,11 @@ function exportResult() {
 }
 
 function loadColumns() {
-
   let html = "";
 
   for (const col of data.columns) {
+    const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join(', ') : allPlaces.join(', ');
+
       html += `
           <div class="item">
               <div class="title">
@@ -83,7 +98,7 @@ function loadColumns() {
               <div class="content">
                   <div>
                       <p>說明：${col.explain}</p>
-                      <p>最可能出現的地方：</p>
+                      <p>最可能出現的地方：${places}</p>
                   </div>
                   <div class="guideHint">
                       <a href="guide.html?type=${col.name}&typeDisplay=${col.display}">開始導覽 ▶</a>
