@@ -15,14 +15,14 @@ const data = {
         ,{ "name": "ancestral_hall",
           "display": "堂號",
           "explain": "" }
+        ,{ "name": "author",
+          "display": "作者",
+          "explain": "" }
         ,{ "name": "first_Ancestor",
           "display": "一世祖",
           "explain": "" }
         ,{ "name": "migrant_Ancestor",
           "display": "始遷祖",
-          "explain": "" }
-        ,{ "name": "author",
-          "display": "作者",
           "explain": "" }
         ,{ "name": "place",
           "display": "譜籍地",
@@ -68,7 +68,7 @@ function exportResult() {
   document.getElementById("exportResult").textContent = "已複製結果到剪貼簿：" + result;
 }
 
-async function loadColumns() {
+function loadColumns() {
 
   let html = "";
 
@@ -86,7 +86,7 @@ async function loadColumns() {
                       <p>最可能出現的地方：</p>
                   </div>
                   <div class="guideHint">
-                      <a href="guide.html">開始導覽 ▶</a>
+                      <a href="guide.html?type=${col.name}&typeDisplay=${col.display}">開始導覽 ▶</a>
                   </div>
               </div>
           </div>
@@ -110,5 +110,16 @@ function fillUrlValue() {
         }
     }
 }
+
+function clearAll() {
+    const inputs = document.querySelectorAll('#metadataList input[type="text"]');
+    inputs.forEach(input => {
+        input.value = "";
+    });
+
+    const newUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
+}
+
 
 loadColumns();

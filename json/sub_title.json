@@ -1,17 +1,16 @@
 {
-    "type": "title",
     "questions": {
         "1": { 
-            "text": "封面有書名嗎？",
-            "images": ["images/title_1.png"],
+            "text": "封面有較小的字體嗎？不包括堂號、書背",
+            "images": [""],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
             ]
         },
         "2": {
-            "text": "版心有書名嗎？",
-            "images": ["images/title_2.png"],
+            "text": "目錄有不同於書名的地方嗎？",
+            "images": [""],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "pass" }

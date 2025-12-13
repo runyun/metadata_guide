@@ -1,0 +1,20 @@
+{
+    "questions": {
+        "1": { 
+            "text": "封面有書名嗎？",
+            "images": ["images/title_1.png"],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "2" }
+            ]
+        },
+        "2": {
+            "text": "版心有書名嗎？",
+            "images": ["images/title_2.png"],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "pass" }
+            ]
+        }
+    }
+}

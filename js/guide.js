@@ -1,13 +1,28 @@
-load();
 
-function backToIndex(type, value) {
-  window.location.href = "index.html?type=" + type + "&value=" + value;
+let currentType = null;   // 全域保存 type
+let questionData = null; // 保存載入的 json
+
+function backToIndex(value) {
+    window.location.href =
+        "index.html?type=" + encodeURIComponent(currentType) +
+        "&value=" + encodeURIComponent(value);
 }
 
+
 async function load() {
-    const r = await fetch("../json/questions.json");
-    const data = await r.json();
-    startRender(data);
+    const params = new URLSearchParams(window.location.search);
+    currentType = params.get('type');
+    typeDisplay = params.get('typeDisplay');
+
+    let jsonPath = "../json/"+ currentType + ".json";
+
+
+    const r = await fetch(jsonPath);
+    questionData = await r.json();
+
+    startRender(questionData);
+
+    document.getElementById("typeDisplay").textContent = typeDisplay;
 }
 
 let currentId = "1";  // 第一題
@@ -17,14 +32,22 @@ function startRender(data) {
 }
 
 function renderQuestion(data, id) {
+    currentId = id;         // 更新現在題目
+
     const q = data.questions[id];
-    const app = document.getElementById("app");
-    app.innerHTML = ""; // 清除舊畫面
+    const question = document.getElementById("question");
+    const answerBtn = document.getElementById('answerBtn');
+    const images = document.getElementById('sampleImage');
+
+    // 清除舊畫面
+    question.innerHTML = ""; 
+    answerBtn.innerHTML = ""; 
+    images.innerHTML = ""; 
 
     // 問題文字
     const title = document.createElement("h2");
     title.textContent = q.text;
-    app.appendChild(title);
+    question.appendChild(title);
 
     // 答案按鈕
     const btnBox = document.createElement("div");
@@ -37,19 +60,19 @@ function renderQuestion(data, id) {
         btn.onclick = () => {
             if (ans.next) {
                 if (ans.next === "pass") {
-                    showDone();
+                    backToIndex('?.?');
                 } else {
                     renderQuestion(data, ans.next);
                 }
             } else {
-                showDone();
+                renderAnswer();
             }
         };
 
         btnBox.appendChild(btn);
     });
 
-    app.appendChild(btnBox);
+    answerBtn.appendChild(btnBox);
 
     // 圖片區
     if (q.images && q.images.length > 0) {
@@ -58,7 +81,7 @@ function renderQuestion(data, id) {
         const example = document.createElement("p");
         
         example.textContent = "範例圖片：";
-        app.appendChild(example);
+        images.appendChild(example);
         imgBox.className = "imageBox";
 
         q.images.forEach(src => {
@@ -68,15 +91,57 @@ function renderQuestion(data, id) {
             imgBox.appendChild(img);
         });
 
-        app.appendChild(imgBox);
+        images.appendChild(imgBox);
     }
 
 }
 
-function showDone() {
-    const app = document.getElementById("app");
-    app.innerHTML = `
-        <h2>導覽完成！</h2>
-        <p>感謝回答所有問題。</p>
-    `;
+function renderAnswer() {
+    const answerBtn = document.getElementById("answerBtn");
+    answerBtn.innerHTML = ""; // 清空畫面
+
+    // 標題
+    const title = document.createElement("h2");
+    title.textContent = "請輸入你的回答";
+    answerBtn.appendChild(title);
+
+    // 單行輸入框
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "請輸入答案";
+    input.maxLength = 20;
+    input.style.width = "100%";
+    input.style.fontSize = "16px";
+    input.style.padding = "8px";
+    answerBtn.appendChild(input);
+
+    // 按鈕區
+    const btnBox = document.createElement("div");
+    btnBox.className = "btnBox";
+
+    const doneBtn = document.createElement("button");
+    doneBtn.textContent = "完成";
+
+    doneBtn.onclick = () => {
+        const answerText = input.value.trim();
+        backToIndex(answerText);
+    };
+
+    btnBox.appendChild(doneBtn);
+    answerBtn.appendChild(btnBox);
+
+    // 取消按鈕（回到上一個 renderQuestion）
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "取消";
+    cancelBtn.onclick = () => {
+        if (currentId) {
+            renderQuestion(questionData, currentId);
+        }
+    };
+
+    answerBtn.appendChild(cancelBtn);
+
+    input.focus();
 }
+
+load();
