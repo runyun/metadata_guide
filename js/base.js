@@ -6,51 +6,64 @@ const data = {
           "placeIndexes": [0, 1, 5] }
         ,{ "name": "sub_title",
           "display": "副譜名",
-          "explain": "輔助譜名，增加辨識度" }
+          "explain": "輔助譜名，增加辨識度",
+          "placeIndexes": [0, 1, 2, 3] }
         ,{ "name": "surname",
           "display": "姓氏",
-          "explain": "家譜裡包含什麼姓氏的世系" }
+          "explain": "家譜裡包含什麼姓氏的世系",
+          "placeIndexes": [0, 1] }
         ,{ "name": "total_number",
           "display": "總卷數",
-          "explain": "家譜的所有本數和使用單位" }
+          "explain": "家譜的所有本數和使用單位",
+          "placeIndexes": [2, 10] }
         ,{ "name": "ancestral_hall",
           "display": "堂號",
-          "explain": "" }
+          "explain": "用於識別、區分不同支系或發源地的特殊徽號",
+          "placeIndexes": [0, 1, 4, 11] }
         ,{ "name": "author",
           "display": "作者",
-          "explain": "" }
+          "explain": "主要編輯者",
+          "placeIndexes": [0, 3, 5, 9] }
         ,{ "name": "first_Ancestor",
           "display": "一世祖",
-          "explain": "" }
+          "explain": "世系圖上的第一代祖先", 
+          "placeIndexes": [3, 7, 8] }
         ,{ "name": "migrant_Ancestor",
           "display": "始遷祖",
-          "explain": "" }
+          "explain": "一世祖之後遷徒的祖先",
+          "placeIndexes": [3, 7, 8] }
         ,{ "name": "place",
           "display": "譜籍地",
-          "explain": "" }
+          "explain": "一世祖或始遷祖遷到的現代地名",
+          "placeIndexes": [3, 8] }
         ,{ "name": "beg_year",
           "display": "起年",
-          "explain": "" }
+          "explain": "家譜所記載的最早祖先的西元年",
+          "placeIndexes": [8] }
         ,{ "name": "publish_year",
           "display": "出版年",
-          "explain": "" }
+          "explain": "家譜出版的西元年",
+          "placeIndexes": [3, 4, 5, 6] }
         ,{ "name": "volumes",
           "display": "卷冊內容",
-          "explain": "" }
+          "explain": "若是這套家譜本數多於一本，各本的內容主題", 
+          "placeIndexes": [1, 2] }
     ]
 };
 
 const allPlaces = [
   "封面" // 0
   , "版心"
-  , "目錄"
+  , "目錄" // 2
   , "序言"
   , "書名頁" // 4
   , "版權頁"
-  , "後記/跋"
+  , "後記/跋" // 6
   , "世系圖"
-  , "世傳"
-  , "修譜名錄" // 9
+  , "世傳" // 8
+  , "修譜名錄" 
+  , "凡例" // 10
+  , "祠堂圖"
 ];
 
 function toggleContent(event) {
