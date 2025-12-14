@@ -10,7 +10,7 @@ const data = {
           "placeIndexes": [0, 1, 2, 3] }
         ,{ "name": "surname",
           "display": "姓氏",
-          "explain": "家譜裡包含什麼姓氏的世系",
+          "explain": "家譜裡包含什麼姓氏的世系？最多記載兩個姓氏",
           "placeIndexes": [0, 1] }
         ,{ "name": "total_number",
           "display": "總卷數",
@@ -24,11 +24,11 @@ const data = {
           "display": "作者",
           "explain": "主要編輯者",
           "placeIndexes": [0, 3, 5, 9] }
-        ,{ "name": "first_Ancestor",
+        ,{ "name": "first_ancestor",
           "display": "一世祖",
           "explain": "世系圖上的第一代祖先", 
           "placeIndexes": [3, 7, 8] }
-        ,{ "name": "migrant_Ancestor",
+        ,{ "name": "migrant_ancestor",
           "display": "始遷祖",
           "explain": "一世祖之後遷徒的祖先",
           "placeIndexes": [3, 7, 8] }

@@ -48,6 +48,14 @@ function renderQuestion(data, id) {
     const title = document.createElement("h2");
     title.textContent = q.text;
     question.appendChild(title);
+    
+    // 警告文字
+    if (q.warnings) {
+        const warning = document.createElement("p");
+        warning.className = "warningText";
+        warning.textContent = "注意：" + q.warnings;
+        question.appendChild(warning);
+    }
 
     // 答案按鈕
     const btnBox = document.createElement("div");

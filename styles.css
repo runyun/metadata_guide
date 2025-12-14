@@ -112,3 +112,9 @@ button {
 button:hover {
     background: #0056cc;
 }
+
+.warningText {
+    color: #b33;
+    font-weight: bold;
+    margin-top: 10px;
+}

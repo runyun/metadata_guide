@@ -1,0 +1,57 @@
+{
+    "questions": {
+        "1": { 
+            "text": "在封面或是書背有看到作者嗎？",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "2" }
+            ]
+        },
+        "2": { 
+            "text": "在版權頁有看到作者嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "3" }
+            ]
+        },
+        "3": { 
+            "text": "有修譜名錄嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "4" }
+            ]
+        },
+        "4": { 
+            "text": "有修譜理事會名單嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "5" }
+            ]
+        },
+        "5": { 
+            "text": "有和出版年的年代相同的序，並且最後有署名的嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "6" }
+            ]
+        },
+        "6": { 
+            "text": "有和出版年的年代相同的後記/跋，並且最後有署名的嗎？通常在書的最後幾頁",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "pass" }
+            ]
+        }
+    }
+}
