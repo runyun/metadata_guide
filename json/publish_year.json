@@ -1,0 +1,66 @@
+{
+    "questions": {
+        "1": { 
+            "text": "版權頁有寫出版年嗎？",
+            "warnings": "通常在第1頁或最後1頁",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "2" }
+            ]
+        },
+        "2": { 
+            "text": "封面有寫出版年嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "3" }
+            ]
+        },
+        "3": { 
+            "text": "書名頁有寫出版年嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "4" }
+            ]
+        },
+        "4": { 
+            "text": "版心有寫出版年嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "5" }
+            ]
+        },
+        "5": { 
+            "text": "跋有寫出版年嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "6" }
+            ]
+        },
+        "6": { 
+            "text": "最新的序(這次譜書寫好時寫的)有寫出版年嗎？",
+            "warnings": "",
+            "images": [""],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "7" }
+            ]
+        },
+        "7": { 
+            "text": "書上最後一代有任何年份資訊嗎？",
+            "images": ["有的話請填離現在最近的年份"],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "pass" }
+            ]
+        }
+    }
+}

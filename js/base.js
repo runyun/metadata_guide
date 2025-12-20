@@ -10,7 +10,8 @@ const data = {
           "placeIndexes": [0, 1, 2, 3] }
         ,{ "name": "surname",
           "display": "姓氏",
-          "explain": "家譜裡包含什麼姓氏的世系？最多記載兩個姓氏",
+          "explain": "家譜裡包含什麼姓氏的世系？",
+          "rules": ["最多記載兩個姓氏"],
           "placeIndexes": [0, 1] }
         ,{ "name": "total_number",
           "display": "總卷數",
@@ -19,18 +20,31 @@ const data = {
         ,{ "name": "ancestral_hall",
           "display": "堂號",
           "explain": "用於識別、區分不同支系或發源地的特殊徽號",
+          "rules": ["只記一個，如有多個就記第1個"],
           "placeIndexes": [0, 1, 4, 11] }
         ,{ "name": "author",
           "display": "作者",
           "explain": "主要編輯者",
+          "rules": [
+            "填寫時需連名帶姓"
+            , "只填寫一個人就好"
+            , "如果沒有的話就留空"],
           "placeIndexes": [0, 3, 5, 9] }
         ,{ "name": "first_ancestor",
-          "display": "一世祖",
+          "display": "**一世祖",
           "explain": "世系圖上的第一代祖先", 
+          "rules": [
+            "填寫時需連名帶姓"
+            , "填寫諱名"
+            , "只填寫一個人就好"],
           "placeIndexes": [3, 7, 8] }
         ,{ "name": "migrant_ancestor",
-          "display": "始遷祖",
+          "display": "**始遷祖",
           "explain": "一世祖之後遷徒的祖先",
+          "rules": [
+            "填寫時需連名帶姓"
+            , "填寫諱名"
+            , "只填寫一個人就好"],
           "placeIndexes": [3, 7, 8] }
         ,{ "name": "place",
           "display": "譜籍地",
@@ -39,6 +53,7 @@ const data = {
         ,{ "name": "beg_year",
           "display": "起年",
           "explain": "家譜所記載的最早祖先的西元年",
+          "rules": ["西元年前的用負數"],
           "placeIndexes": [8] }
         ,{ "name": "publish_year",
           "display": "出版年",
@@ -95,11 +110,22 @@ function exportResult() {
   document.getElementById("exportResult").textContent = "已複製結果到剪貼簿：" + result;
 }
 
+function renderRules(rules) {
+  if (!Array.isArray(rules) || rules.length === 0) return '';
+
+  return `
+    <p>注意事項：</p>
+    <ul>
+      ${rules.map(r => `<li>${r}</li>`).join('')}
+    </ul>
+  `;
+}
+
 function loadColumns() {
   let html = "";
 
   for (const col of data.columns) {
-    const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join(', ') : allPlaces.join(', ');
+    const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join('、 ') : allPlaces.join('、 ');
 
       html += `
           <div class="item">
@@ -112,6 +138,7 @@ function loadColumns() {
                   <div>
                       <p>說明：${col.explain}</p>
                       <p>最可能出現的地方：${places}</p>
+                      ${renderRules(col.rules)}
                   </div>
                   <div class="guideHint">
                       <a href="guide.html?type=${col.name}&typeDisplay=${col.display}">開始導覽 ▶</a>

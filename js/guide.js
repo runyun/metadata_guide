@@ -72,6 +72,8 @@ function renderQuestion(data, id) {
                 } else {
                     renderQuestion(data, ans.next);
                 }
+            } else if (ans.return){
+                backToIndex(ans.return);
             } else {
                 renderAnswer();
             }
