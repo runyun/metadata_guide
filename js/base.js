@@ -31,7 +31,7 @@ const data = {
             , "如果沒有的話就留空"],
           "placeIndexes": [0, 3, 5, 9] }
         ,{ "name": "first_ancestor",
-          "display": "**一世祖",
+          "display": "一世祖",
           "explain": "世系圖上的第一代祖先", 
           "rules": [
             "填寫時需連名帶姓"
@@ -39,7 +39,7 @@ const data = {
             , "只填寫一個人就好"],
           "placeIndexes": [3, 7, 8] }
         ,{ "name": "migrant_ancestor",
-          "display": "**始遷祖",
+          "display": "始遷祖",
           "explain": "一世祖之後遷徒的祖先",
           "rules": [
             "填寫時需連名帶姓"
