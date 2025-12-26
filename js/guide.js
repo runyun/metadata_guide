@@ -2,10 +2,16 @@
 let currentType = null;   // 全域保存 type
 let questionData = null; // 保存載入的 json
 
+
 function backToIndex(value) {
-    window.location.href =
-        "index.html?type=" + encodeURIComponent(currentType) +
-        "&value=" + encodeURIComponent(value);
+    // 讀取原本資料（如果沒有就給空物件）
+    const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
+
+    stored[currentType] = value;
+
+    localStorage.setItem("guideData", JSON.stringify(stored));
+
+    window.location.href = "index.html";
 }
 
 

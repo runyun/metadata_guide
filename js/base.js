@@ -148,23 +148,40 @@ function loadColumns() {
       `;
   }
 
+  const memo = `
+          <div class="item">
+              <div class="title">
+                  備註
+                  <input type="text" id="memo" placeholder="請輸入備註">
+                  <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
+              </div>
+              <div class="content">
+                  <div>
+                      <p>說明：譜書需要特別注意的事情，比如:缺幾本、泡過水、有幾頁毀損…等</p>
+                  </div>
+              </div>
+          </div>
+      `;
+  
+  html += memo;
+
   document.getElementById("metadataList").innerHTML = html;
 
-  fillUrlValue()
+  fillFromLocalStorage()
 }
 
-function fillUrlValue() {
-    const params = new URLSearchParams(location.search);
-    const type = params.get("type");
-    const value = params.get("value");
+function fillFromLocalStorage() {
+    const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
 
-    if (type) {
-        const input = document.getElementById(type + "Result");
+    for (const key in stored) {
+        const input = document.getElementById(key + "Result");
         if (input) {
-            input.value = value;
+            input.value = stored[key];
         }
     }
 }
+
+
 
 function clearAll() {
     const inputs = document.querySelectorAll('#metadataList input[type="text"]');
@@ -172,9 +189,9 @@ function clearAll() {
         input.value = "";
     });
 
-    const newUrl = window.location.origin + window.location.pathname;
-    window.history.replaceState({}, document.title, newUrl);
+    localStorage.removeItem("guideData");
 }
+
 
 
 loadColumns();
