@@ -118,3 +118,33 @@ button:hover {
     font-weight: bold;
     margin-top: 10px;
 }
+
+.imageBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.imageDescription {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.imageSlider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.imageBox button {
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.imageCounter {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+}

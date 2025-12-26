@@ -84,25 +84,72 @@ function renderQuestion(data, id) {
 
     answerBtn.appendChild(btnBox);
 
-    // 圖片區
+    // 圖片區（輪播 + 說明文字 + 第幾張）
     if (q.images && q.images.length > 0) {
-        const imgBox = document.createElement("div");
+        let currentIndex = 0;
+        const total = q.images.length;
 
-        const example = document.createElement("p");
-        
-        example.textContent = "範例圖片：";
-        images.appendChild(example);
+        const imgBox = document.createElement("div");
         imgBox.className = "imageBox";
 
-        q.images.forEach(src => {
-            const img = document.createElement("img");
-            img.src = src;
-            img.className = "questionImage";
-            imgBox.appendChild(img);
-        });
+        const example = document.createElement("p");
+        example.textContent = "範例圖片：";
+        images.appendChild(example);
 
+        // 說明文字
+        const description = document.createElement("p");
+        description.className = "imageDescription";
+
+        // 第幾張
+        const counter = document.createElement("p");
+        counter.className = "imageCounter";
+
+        // 左右箭頭
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "←";
+
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "→";
+
+        // 圖片
+        const img = document.createElement("img");
+        img.className = "questionImage";
+
+        // 更新顯示
+        function updateImage() {
+            img.src = "../images/" + currentType + "/" + q.images[currentIndex].file;
+            description.textContent = q.images[currentIndex].description || "";
+            counter.textContent = `(${currentIndex + 1} / ${total})`;
+        }
+
+        // 初始
+        updateImage();
+
+        // 按鈕事件
+        prevBtn.onclick = () => {
+            currentIndex = (currentIndex - 1 + total) % total;
+            updateImage();
+        };
+
+        nextBtn.onclick = () => {
+            currentIndex = (currentIndex + 1) % total;
+            updateImage();
+        };
+
+        // 組裝
+        imgBox.appendChild(description);
+        imgBox.appendChild(counter);
+
+        const slider = document.createElement("div");
+        slider.className = "imageSlider";
+        slider.appendChild(prevBtn);
+        slider.appendChild(img);
+        slider.appendChild(nextBtn);
+
+        imgBox.appendChild(slider);
         images.appendChild(imgBox);
     }
+
 
 }
 

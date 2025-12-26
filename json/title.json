@@ -1,25 +1,36 @@
 {
     "questions": {
         "1": { 
-            "text": "封面有書名嗎？",
-            "images": ["images/title_1.png"],
+            "text": "封面有書名而且有辨識度嗎？",
+            "images": [
+                {"file": "title_cover_common.png", "description": "沒辨識度的譜名"},
+                {"file": "title_cover_special.png", "description": "有辨識度的譜名"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
             ]
         },
         "2": { 
-            "text": "書名頁有書名嗎？",
-            "images": ["images/title_1.png"],
-            "answers": [
+            "text": "書名頁有書名而且有辨識度嗎？",
+            "images": [
+                {"file": "title_1st_common.png", "description": "沒辨識度的譜名"},
+                {"file": "title_1st_special.png", "description": "有辨識度的譜名"}
+            ],
+            "answers": 
+            [
                 { "text": "有"},
                 { "text": "沒有", "next": "3" }
             ]
         },
         "3": {
-            "text": "版心有書名嗎？",
-            "images": ["images/title_2.png"],
-            "answers": [
+            "text": "版心有書名而且有辨識度嗎？",
+            "images": [
+                {"file": "title_not_special.png", "description": "沒辨識度的譜名"},
+                {"file": "title_special.png", "description": "有辨識度的譜名"}
+            ],
+            "answers": 
+            [
                 { "text": "有"},
                 { "text": "沒有(結束)", "next": "pass" }
             ]

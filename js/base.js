@@ -3,7 +3,7 @@ const data = {
         { "name": "title",
           "display": "譜名",
           "explain": "家譜的書名",
-          "placeIndexes": [0, 1, 5] }
+          "placeIndexes": [0, 1] }
         ,{ "name": "sub_title",
           "display": "副譜名",
           "explain": "輔助譜名，增加辨識度",
@@ -12,7 +12,7 @@ const data = {
           "display": "姓氏",
           "explain": "家譜裡包含什麼姓氏的世系？",
           "rules": ["最多記載兩個姓氏"],
-          "placeIndexes": [0, 1] }
+          "placeIndexes": [0, 1, 4] }
         ,{ "name": "total_number",
           "display": "總卷數",
           "explain": "家譜的所有本數和使用單位",
