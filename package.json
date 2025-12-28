@@ -1,0 +1,8 @@
+{
+  "name": "metadata_guide",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/generate_env.js"
+  }
+}

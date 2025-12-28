@@ -6,15 +6,45 @@
     
     <link rel="stylesheet" href="styles.css"> 
 
-    <title>Guide - Home</title>
+    <title>Guide - 主頁</title>
 </head>
 <body>
-    <div id="homeContainer">
-        <div id="metadataList"></div>
-    </div>
+        <header>
+            <div id="userDisplayArea">
+                <span id="userDisplay"></span>
+                <button id="logoutBtn">登出</button>
+                <button id="viewMetadataBtn" style="margin-left:1rem;">查看已送出清單</button>
+            </div>
+        </header>
 
-    <button id="clearBtn" onclick="clearAll()">清空</button>
+        <div id="loginBox">
+            <label>名稱： <input id="loginName" placeholder="輸入你的名稱"></label>
+            <button id="loginBtn">登入</button>
+        </div>
 
-    <script src="js/base.js"></script>
+        <div id="homeContainer" style="display:none;">
+            <div id="metadataList"></div>
+                        <div id="controls" style="margin-top:1rem;">
+                            <button id="submitBtn">送出</button>
+                            <button id="clearBtn" onclick="clearAll()">清空</button>
+                            <span id="submitResult" style="margin-left:1rem;color:green"></span>
+                        </div>
+        </div>
+
+
+        <!-- Env (generated during build), Supabase CDN, client wrapper and auth -->
+        <script src="js/env.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+        <script src="js/supabaseClient.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/submit.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const btn = document.getElementById('viewMetadataBtn');
+                if (btn) btn.addEventListener('click', () => window.open('list.html', '_blank'));
+            });
+        </script>
+
+        <script src="js/base.js"></script>
 </body>
 </html>

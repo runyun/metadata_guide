@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css"> 
-    <title>Guide</title>
+    <title>Guide - 引導</title>
 </head>
 <body>
     <a href="index.html">
@@ -15,6 +15,23 @@
     <div id="answerBtn"></div>
     <div id="sampleImage"></div>
 
-    <script src="js/guide.js"></script>
+        <!-- Env & Auth scripts: redirect to index if not logged in -->
+        <script src="js/env.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+        <script src="js/supabaseClient.js"></script>
+        <script src="js/auth.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
+                if (!user) {
+                    alert('請先登入');
+                    location.href = 'index.html';
+                    return;
+                }
+            });
+        </script>
+
+        <script src="js/guide.js"></script>
 </body>
 </html>

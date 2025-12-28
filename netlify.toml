@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"
+  publish = "."
+
+[context.production.environment]
+# Set SUPABASE_URL and SUPABASE_ANON_KEY in Netlify UI (Site settings → Build & deploy → Environment)

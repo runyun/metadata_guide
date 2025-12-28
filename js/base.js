@@ -193,5 +193,22 @@ function clearAll() {
 }
 
 
+function initApp() {
+  loadColumns();
+}
 
-loadColumns();
+document.addEventListener('DOMContentLoaded', () => {
+  // If already logged in, initialize immediately
+  const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
+  if (user) initApp();
+
+  // Called when login completes
+  window.onUserLogin = function(user) {
+    initApp();
+  };
+
+  // Called on logout (optional cleanup)
+  window.onUserLogout = function() {
+    // currently nothing special to clear beyond UI
+  };
+});
