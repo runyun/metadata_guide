@@ -63,6 +63,14 @@ const data = {
           "display": "卷冊內容",
           "explain": "若是這套家譜本數多於一本，各本的內容主題", 
           "placeIndexes": [1, 2] }
+        ,{ "name": "donor",
+          "display": "捐贈者",
+          "explain": "贈送這本譜書的人的姓名", 
+          "placeIndexes": [0] }
+        ,{ "name": "donor_contact",
+          "display": "捐贈者聯絡方式",
+          "explain": "捐贈者的聯絡方式，可能是電話、地址、社群網站…", 
+          "placeIndexes": [0] }
     ]
 };
 
@@ -132,6 +140,7 @@ function loadColumns() {
               <div class="title">
                   ${col.display}
                   <input type="text" id="${col.name}Result" placeholder="請輸入${col.display}">
+                  <input type="text" id="${col.name}Page" placeholder="頁數" >
                   <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
               </div>
               <div class="content">
@@ -153,6 +162,7 @@ function loadColumns() {
               <div class="title">
                   備註
                   <input type="text" id="memo" placeholder="請輸入備註">
+                  <span></span>
                   <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
               </div>
               <div class="content">
