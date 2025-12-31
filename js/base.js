@@ -181,14 +181,19 @@ function loadColumns() {
 }
 
 function fillFromLocalStorage() {
-    const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
+  const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
 
-    for (const key in stored) {
-        const input = document.getElementById(key + "Result");
-        if (input) {
-            input.value = stored[key];
-        }
+  for (const key in stored) {
+    const input = document.getElementById(key + "Result");
+    if (input) {
+      input.value = stored[key].value || ""; 
     }
+
+    const pageInput = document.getElementById(key + "Page");
+    if (pageInput) {
+      pageInput.value = stored[key].page || "";
+    }
+  }
 }
 
 

@@ -3,11 +3,11 @@ let currentType = null;   // 全域保存 type
 let questionData = null; // 保存載入的 json
 
 
-function backToIndex(value) {
+function backToIndex(value, page) {
     // 讀取原本資料（如果沒有就給空物件）
     const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
 
-    stored[currentType] = value;
+    stored[currentType] = {value, page};
 
     localStorage.setItem("guideData", JSON.stringify(stored));
 
@@ -169,14 +169,25 @@ function renderAnswer() {
     answerBtn.appendChild(title);
 
     // 單行輸入框
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = "請輸入答案";
-    input.maxLength = 20;
-    input.style.width = "100%";
-    input.style.fontSize = "16px";
-    input.style.padding = "8px";
-    answerBtn.appendChild(input);
+    const inputText = document.createElement("input");
+    inputText.type = "text";
+    inputText.placeholder = "請輸入答案";
+    inputText.maxLength = 20;
+    inputText.style.width = "100%";
+    inputText.style.fontSize = "16px";
+    inputText.style.padding = "8px";
+
+    answerBtn.appendChild(inputText);
+
+    const inputPage = document.createElement("input");
+    inputPage.type = "text";
+    inputPage.placeholder = "請輸入頁碼";
+    inputPage.maxLength = 20;
+    inputPage.style.width = "100%";
+    inputPage.style.fontSize = "16px";
+    inputPage.style.padding = "8px";
+
+    answerBtn.appendChild(inputPage);
 
     // 按鈕區
     const btnBox = document.createElement("div");
@@ -186,8 +197,9 @@ function renderAnswer() {
     doneBtn.textContent = "完成";
 
     doneBtn.onclick = () => {
-        const answerText = input.value.trim();
-        backToIndex(answerText);
+        const answerText = inputText.value.trim();
+        const answerPage = inputPage.value.trim();
+        backToIndex(answerText, answerPage);
     };
 
     btnBox.appendChild(doneBtn);
@@ -204,7 +216,7 @@ function renderAnswer() {
 
     answerBtn.appendChild(cancelBtn);
 
-    input.focus();
+    inputText.focus();
 }
 
 load();
