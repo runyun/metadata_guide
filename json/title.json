@@ -1,38 +1,58 @@
 {
     "questions": {
         "1": { 
-            "text": "封面有書名而且有辨識度嗎？",
+            "text": "依序看封面、書名頁、版心的譜名並選擇其中最有辨識度的",
+            "warning": "如果都很有辨識度的話依順序選擇封面>書名頁>版心",
             "images": [
-                {"file": "title_cover_common.png", "description": "沒辨識度的譜名"},
-                {"file": "title_cover_special.png", "description": "有辨識度的譜名"}
+                {"file": "title_cover_common.png", "description": "封面沒辨識度的譜名"},
+                {"file": "title_cover_special.png", "description": "封面有辨識度的譜名"},
+                {"file": "title_1st_common.png", "description": "書名頁沒辨識度的譜名"},
+                {"file": "title_1st_special.png", "description": "書名頁有辨識度的譜名"},
+                {"file": "title_heart_common.png", "description": "版心沒辨識度的譜名"},
+                {"file": "title_heart_special.png", "description": "版心有辨識度的譜名"}
             ],
             "answers": [
-                { "text": "有"},
-                { "text": "沒有", "next": "2" }
+                { "text": "封面", "next": "3"},
+                { "text": "書名頁或版心", "next": "5" },
+                { "text": "這3個地方都沒有看到譜名", "next": "2" }
             ]
         },
         "2": { 
-            "text": "書名頁有書名而且有辨識度嗎？",
+            "text": "目錄題有譜名嗎？",
             "images": [
-                {"file": "title_1st_common.png", "description": "沒辨識度的譜名"},
-                {"file": "title_1st_special.png", "description": "有辨識度的譜名"}
             ],
             "answers": 
             [
                 { "text": "有"},
-                { "text": "沒有", "next": "3" }
+                { "text": "沒有(結束)", "return": "pass" }
             ]
         },
-        "3": {
-            "text": "版心有書名而且有辨識度嗎？",
+        "3": { 
+            "text": "封面的譜名有較小字體嗎？",
             "images": [
-                {"file": "title_not_special.png", "description": "沒辨識度的譜名"},
-                {"file": "title_special.png", "description": "有辨識度的譜名"}
             ],
             "answers": 
             [
-                { "text": "有"},
-                { "text": "沒有(結束)", "next": "pass" }
+                { "text": "有", "next": "4"},
+                { "text": "沒有", "next": "5" }
+            ]
+        },
+        "4": { 
+            "text": "封面的譜名有較小字體的部份不填，只填寫大字體的部分",
+            "images": [
+            ],
+            "answers": 
+            [
+                { "text": "填寫"}
+            ]
+        },
+        "5": { 
+            "text": "直接填寫看到的譜名",
+            "images": [
+            ],
+            "answers": 
+            [
+                { "text": "填寫"}
             ]
         }
     }

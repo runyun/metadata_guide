@@ -56,10 +56,10 @@ function renderQuestion(data, id) {
     question.appendChild(title);
     
     // 警告文字
-    if (q.warnings) {
+    if (q.warning) {
         const warning = document.createElement("p");
         warning.className = "warningText";
-        warning.textContent = "注意：" + q.warnings;
+        warning.textContent = "注意：" + q.warning;
         question.appendChild(warning);
     }
 
@@ -73,13 +73,15 @@ function renderQuestion(data, id) {
 
         btn.onclick = () => {
             if (ans.next) {
-                if (ans.next === "pass") {
+                renderQuestion(data, ans.next);
+
+            } else if (ans.return){
+                if (ans.return === "pass") {
                     backToIndex('?.?');
                 } else {
-                    renderQuestion(data, ans.next);
+                    backToIndex(ans.return);
                 }
-            } else if (ans.return){
-                backToIndex(ans.return);
+
             } else {
                 renderAnswer();
             }
