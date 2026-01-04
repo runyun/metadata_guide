@@ -4,60 +4,82 @@
             "text": "世系圖上有寫「1世」的人嗎？",
             "warning": "也許有多位寫著「1世」的人。若是「始祖」之後直拉接「2世」的話，那這位始祖就是1世祖",
             "images": [
-                {"file": "first_ancestor_lien.png", "description": "因為有可能會有多個世系圖，可以從譜名和內紀做為關鍵字判斷是不是這個世系，這例子是峰川，世系前面也寫了峰川，並且有內紀兩字，所以這位一世高機率就是我們要的，請填入「胡邦義」"}
+                {"file": "first_ancestor_line.png", "description": "因為有可能會有多個世系圖，可以從譜名和內紀做為關鍵字判斷是不是這個世系，這例子是峰川，世系前面也寫了峰川，並且有內紀兩字，所以這位一世高機率就是我們要的，請填入「胡邦義」"}
             ],
             "answers": [
                 { "text": "有", "next": "2"},
-                { "text": "沒有", "next": "6" }
+                { "text": "沒有", "next": "7" }
             ]
         },
         "2": { 
             "text": "看譜書的序/前言裡也寫同一個人是1世祖/始祖嗎？",
             "warning": "有時序的內容會寫別名，所以要注意一下是不是同一個人",
             "images": [
-                {"file":"ancestor_aka_1", "description": "這例子裡，序裡寫的是「彥誠」，在世系裡看到這人的諱名是「宗榮」，字是「彥城」，所以要注意看序裡寫的是不是別名，不然會找不到"},
-                {"file":"ancestor_aka_2", "description": "參考上一張圖的說明"}
+                {"file":"ancestor_aka_1.png", "description": "這例子裡，序裡寫的是「彥誠」，在世系裡(下一張)看到這人的諱名是「宗榮」，字是「彥城」，所以要注意看序裡寫的是不是別名，不然會找不到"},
+                {"file":"ancestor_aka_2.png", "description": "參考上一張圖的說明"}
             ],
             "answers": [
                 { "text": "是", "next": "3"},
-                { "text": "不是", "next": "6" }
+                { "text": "不是", "next": "7" }
             ]
         },
         "3": { 
             "text": "有多位一世祖嗎？",
-            "images": [""],
             "answers": [
-                { "text": "有", "next": "4"},
-                { "text": "沒有"}
+                { "text": "有，兩位以上", "next": "4"},
+                { "text": "沒有，只有一位"}
             ]
         },
         "4": { 
             "text": "這些一世祖都是相同世代的嗎？比如:兄弟",
-            "images": ["答案是「是」的話，請填最主要的那一位一世祖"],
+            "images": [
+                {"file": "first_ancestor_same_generation_1.png", "description":"這例子裡有2位一世祖(看下面兩張圖)，他們是同世代的人，也就是兄弟們"},
+                {"file": "first_ancestor_same_generation_3.png", "description":"在世系圖上「德同」是一世"},
+                {"file": "first_ancestor_same_generation_2.png", "description":"在世系圖上也「信同」是一世"}
+            ],
             "answers": [
-                { "text": "是"},
-                { "text": "不是", "next": "5"}
+                { "text": "是", "next": "5"},
+                { "text": "不是", "next": "6"}
             ]
         },
         "5": { 
-            "text": "有多位一世祖且不是同世代的話，請找他們共同的祖先",
-            "images": [""],
+            "text": "請填最主要的那一位一世祖",
+            "warning": "最主要的意思是後代人數最多的那一位，如果一眼看過去差不多的話就填第一位，不用特別去數人數",
             "answers": [
                 { "text": "填寫"}
             ]
         },
         "6": { 
-            "text": "序裡有提到任何關於一世祖的資訊嗎？",
-            "warnings": "沒有的話請填寫看到的世代數最小，也就是最早西元年的那位祖先",
-            "images": [""],
+            "text": "有多位一世祖且不是同世代的話，請找他們共同的祖先",
+            "images": [
+                {"file": "first_ancestor_differnt_generation.png", "description": "比如圖上的8位都是寫他是一世祖，而且都有後代的紀錄，往上追查後可知第2位是他們的共同祖先，因此要填第2位"},
+                {"file": "first_ancestor_differnt_generation_one_line.png", "description": "如果是只有一條主線的話，那就要填最後一位，也就是第4位"}
+            ],
             "answers": [
-                { "text": "有", "next": "7"},
-                { "text": "沒有"}
+                { "text": "填寫"}
             ]
         },
         "7": { 
+            "text": "序裡有提到任何關於一世祖的資訊嗎？",
+            "answers": [
+                { "text": "有", "next": "8"},
+                { "text": "沒有", "next": "9"}
+            ]
+        },
+        "8": { 
             "text": "請填入能看到世代數最小的祖先，並且把序裡提到的一世祖記下放在首頁的備註中",
-            "images": [""],
+            "images": [
+                {"file": "first_ancestor_not_1st_beg.png", "description":"這例子裡全書沒有寫到一世祖，最小世代數是43世，所以就填「適」這個人，再來回到首頁時把序裡的一世寫在備註裡並註明是一世祖"}
+            ],
+            "answers": [
+                { "text": "填寫"}
+            ]
+        },
+        "9": { 
+            "text": "請填入能看到世代數最小的祖先",
+            "images": [
+                {"file": "first_ancestor_not_1st_beg.png", "description":"這例子裡全書沒有寫到一世祖，最小世代數是43世，所以就填「適」這個人"}
+            ],
             "answers": [
                 { "text": "填寫"}
             ]
