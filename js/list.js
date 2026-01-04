@@ -26,7 +26,7 @@
     container.textContent = '載入中…';
 
     try {
-      const { data, error } = await window.supabaseClient
+      const { data: rows, error } = await window.supabaseClient
         .from('metadata')
         .select('id, user_id, data, created_at')
         .order('created_at', { ascending: false })
@@ -34,31 +34,33 @@
 
       if (error) throw error;
 
-      if (!data || data.length === 0) {
+      if (!rows || rows.length === 0) {
         container.innerHTML = '<p>目前沒有資料。</p>';
         return;
       }
 
-      const list = document.createElement('div');
-      list.className = 'metadataList';
+      const table = document.createElement('table');
+      table.className = 'metadataTable';
 
-      for (const row of data) {
-        const item = document.createElement('div');
-        item.className = 'metadataItem';
-        const title = (row.data && row.data.title) ? row.data.title : '(無譜名)';
+      // Header
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      headerRow.innerHTML = '<th>建立時間</th>' + data.columns.map(col => `<th>${col.display}</th>`).join('');
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // Body
+      const tbody = document.createElement('tbody');
+      for (const row of rows) {
+        const tr = document.createElement('tr');
         const created = fmtDate(row.created_at);
-
-        const pre = document.createElement('pre');
-        pre.textContent = JSON.stringify(row.data, null, 2);
-        pre.style.whiteSpace = 'pre-wrap';
-
-        item.innerHTML = `<h3>${title}</h3><div>建立時間：${created}</div>`;
-        item.appendChild(pre);
-        list.appendChild(item);
+        tr.innerHTML = `<td>${created}</td>` + data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
+        tbody.appendChild(tr);
       }
+      table.appendChild(tbody);
 
       container.innerHTML = '';
-      container.appendChild(list);
+      container.appendChild(table);
 
     } catch (err) {
       container.innerHTML = '<div style="color:crimson">載入失敗：' + (err.message || err) + '</div>';

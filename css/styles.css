@@ -276,3 +276,44 @@ button:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* Metadata Table */
+.metadataTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.metadataTable th, .metadataTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.metadataTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.metadataTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.metadataTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .metadataTable {
+    font-size: 12px;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+  
+  .metadataTable th, .metadataTable td {
+    padding: 4px;
+    min-width: 100px;
+  }
+}

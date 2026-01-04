@@ -1,9 +1,11 @@
 {
     "questions": {
         "1": { 
-            "text": "始遷祖的世傳裡有說到他遷到哪裡嗎？",
-            "warnings": "若是這本始遷祖和1世祖一樣的話就是1世祖的遷徒地",
-            "images": [""],
+            "text": "始遷祖的記事裡有說到他遷到哪裡嗎？",
+            "warning": "若是這本始遷祖和1世祖一樣的話就是1世祖的遷徒地",
+            "images": [
+                {"file": "place_story.png", "description": "按照這例子，世傳裡有寫到遷到「會稽峩嵋山」"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
@@ -11,15 +13,19 @@
         },
         "2": { 
             "text": "序裡有寫到遷徒到哪裡嗎？",
-            "images": [""],
+            "images": [
+                {"file": "place_preface.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "3" }
             ]
         },
         "3": { 
-            "text": "封面有寫地名嗎？",
-            "images": [""],
+            "text": "譜名或副譜名有寫地名嗎？",
+            "images": [
+                {"file": "place_cover.png", "description": "這例子是在封面的副譜名有寫到「青山資陽」"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "return": "pass" }

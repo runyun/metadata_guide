@@ -27,7 +27,7 @@
         <div id="homeContainer">
             <div id="metadataList"></div>
             <div id="controls">
-                <button id="clearBtn" onclick="clearAll()">清空</button>
+                <button id="clearBtn" onclick="if(confirm('確定要清空所有已填寫的資料嗎？此動作無法復原')) clearAll();">清空</button>
                 <button id="submitBtn">送出</button>
                 <span id="submitResult"></span>
             </div>
@@ -47,6 +47,7 @@
             });
         </script>
 
+        <script src="js/data.js"></script>
         <script src="js/base.js"></script>
 </body>
 </html>

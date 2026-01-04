@@ -50,6 +50,9 @@
         },
         "6": { 
             "text": "最新的序(這次譜書寫好時寫的)有寫出版年嗎？",
+            "images":[
+                {"file":"publish_preface.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "7" }
