@@ -75,7 +75,7 @@ function renderQuestion(data, id) {
             if (ans.next) {
                 renderQuestion(data, ans.next);
 
-            } else if (ans.return){
+            } else if (ans.return !== undefined) {
                 if (ans.return === "pass") {
                     backToIndex('?.?');
                 } else {
@@ -112,52 +112,51 @@ function renderQuestion(data, id) {
         const counter = document.createElement("p");
         counter.className = "imageCounter";
 
-        // 左右箭頭
-        const prevBtn = document.createElement("button");
-        prevBtn.textContent = "←";
-
-        const nextBtn = document.createElement("button");
-        nextBtn.textContent = "→";
-
         // 圖片
         const img = document.createElement("img");
         img.className = "questionImage";
 
-        // 更新顯示
         function updateImage() {
             img.src = "../images/" + currentType + "/" + q.images[currentIndex].file;
             description.textContent = q.images[currentIndex].description || "";
             counter.textContent = `(${currentIndex + 1} / ${total})`;
         }
 
-        // 初始
         updateImage();
 
-        // 按鈕事件
-        prevBtn.onclick = () => {
-            currentIndex = (currentIndex - 1 + total) % total;
-            updateImage();
-        };
-
-        nextBtn.onclick = () => {
-            currentIndex = (currentIndex + 1) % total;
-            updateImage();
-        };
-
-        // 組裝
         imgBox.appendChild(description);
         imgBox.appendChild(counter);
 
         const slider = document.createElement("div");
         slider.className = "imageSlider";
-        slider.appendChild(prevBtn);
-        slider.appendChild(img);
-        slider.appendChild(nextBtn);
+
+        // 只有超過一張圖才顯示左右箭頭
+        if (total > 1) {
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "←";
+            prevBtn.onclick = () => {
+                currentIndex = (currentIndex - 1 + total) % total;
+                updateImage();
+            };
+
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "→";
+            nextBtn.onclick = () => {
+                currentIndex = (currentIndex + 1) % total;
+                updateImage();
+            };
+
+            slider.appendChild(prevBtn);
+            slider.appendChild(img);
+            slider.appendChild(nextBtn);
+        } else {
+            // 只有一張圖，直接顯示圖片
+            slider.appendChild(img);
+        }
 
         imgBox.appendChild(slider);
         images.appendChild(imgBox);
     }
-
 
 }
 

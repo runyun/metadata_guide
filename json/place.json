@@ -22,7 +22,7 @@
             "images": [""],
             "answers": [
                 { "text": "有"},
-                { "text": "沒有", "next": "pass" }
+                { "text": "沒有", "return": "pass" }
             ]
         }
     }

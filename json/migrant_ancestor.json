@@ -2,25 +2,32 @@
     "questions": {
         "1": { 
             "text": "序/前言裡先找到一世祖，然後找文章後來是不是有人遷徒？",
-            "warnings": "如果找到後文有寫到「至今200年…」之類的，那就可預設是他了",
-            "images": [""],
+            "warning": "如果找到後文有寫到「至今200年…」之類的，那就可預設是他了",
+            "images": [
+                { "file": "migrant_ancestor_preface_until.png", "description": "這例子裡，一世祖是廷華，在這邊的序裡找到廷華後往後看到「篤信公遷居」的關鍵字，而且後面沒有再遷徒的紀錄加上寫了「迄今300多年」，所以就是他了" },
+                { "file": "migrant_ancestor_preface_multiple_migrant.png", "description": "這例子裡第一世後又寫了許多遷徒者，要找到最後一位，看關鍵字「遷」和「迄今」，可確定是「國朝」" },
+                { "file": "migrant_ancestor_preface.png", "description": "這例子裡第一世之後有寫到和譜名一樣的「峰川」之後也沒更多遷徒，所以就是「奉七」" }
+            ],
             "answers": [
                 { "text": "有", "next": "2"},
-                { "text": "沒有", "next": "8" }
+                { "text": "沒有", "next": "9" }
             ]
         },
         "2": { 
             "text": "只有寫一位嗎？",
             "images": [""],
             "answers": [
-                { "text": "有" , "next": "3"},
-                { "text": "沒有", "next": "6" }
+                { "text": "只有一位" , "next": "3"},
+                { "text": "兩位以上", "next": "6" }
             ]
         },
         "3": { 
             "text": "和一世祖是同一個人嗎？",
-            "warnings": "一世祖和始遷祖同一人的話就不用填寫，留空",
-            "images": [""],
+            "warning": "一世祖和始遷祖同一人的話就不用填寫，留空",
+            "images": [
+                {"file": "migrant_ancestor_same_first_ancestor_1", "description": "一世和始遷是同一人的例子，在序裡看到最後一位遷徒的是「述古」，看下一張圖"},
+                {"file": "migrant_ancestor_same_first_ancestor_2", "description": "在世系的地方這位「述古」是一世，因為是同一人所以不用填寫，留空即可"}
+            ],
             "answers": [
                 { "text": "是(結束) ", "return": "" },
                 { "text": "不是", "next": "4" }
@@ -28,43 +35,70 @@
         },
         "4":{
             "text": "在世系圖和世傳裡有看到這個人嗎？",
-            "warnings": "有時候序裡面會用字號稱呼祖先，需要注意一下是不是這情形，要不然會找不到人",
-            "images": [""],
+            "warning": "有時候序裡面會用字號稱呼祖先，需要注意一下是不是這情形，要不然會找不到人",
+            "images": [
+                {"file": "migrant_ancestor_preface.png", "description": "在序裡寫的是「奉七」，如果用這名在世傳找的話也許會找不到，因為可能是用字號，看下一張圖"},
+                {"file": "migrant_ancestor_story.png", "description": "在世傳裡要除了諱名之外要留意另外的稱呼，「壽」的行號是「奉七」，這就是序裡提到的那位，因規定要填諱名所以要填寫的是「壽」這個名"},
+                {"file": "migrant_ancestor_line.png", "description": "在世系圖裡也可以找到這個人，詳情參考上一張圖的說明"}
+            ],
             "answers":[
                 { "text": "有", "next": "5"},
                 { "text": "沒有", "return": "" }
             ]
         },
         "5": { 
-            "text": "始遷祖有沒有比一世祖還早出生？",
-            "warnings": "始遷祖比一世祖還早出生的話就不用填寫，留空",
-            "images": [""],
+            "text": "這人有沒有比一世祖還早出生？",
+            "warning": "如果始遷祖比一世祖還早出生的話就不用填寫",
             "answers": [
                 { "text": "有(結束)", "return": "" },
-                { "text": "沒有", "next": "4" }
+                { "text": "沒有"}
             ]
         },
         "6": { 
             "text": "是同一個世代的人嗎？",
-            "images": [""],
+            "images": [
+                {"file": "migrant_ancestor_same_generation.png", "description":"例子裡有4人，他們是同世代的人，也就是兄弟們，都有遷到別的地方"}
+            ],
             "answers": [
-                { "text": "是" , "next": "6"},
-                { "text": "不是", "next": "7" }
+                { "text": "是" , "next": "7"},
+                { "text": "不是", "next": "8" }
             ]
         },
         "7": { 
-            "text": "在世系圖和世傳裡有看到這個人嗎？",
-            "warnings": "有時候序裡面會用字號稱呼祖先，需要注意一下是不是這情形，要不然會找不到人。先用看到的第一位名字來找，如果沒找到人的話先不按任何按鈕，繼續用第二位的名字這樣依序下去",
+            "text": "依照出現的順序在世系圖找人，有找到任何一位嗎？",
+            "warning": "有時候序裡面會用字號稱呼祖先，需要注意一下是不是這情形，要不然會找不到人。先用看到的第一位名字來找，如果沒找到人的話先不按任何按鈕，繼續用第二位的名字這樣依序下去",
+            "images": [
+                {"file": "migrant_ancestor_same_generation.png", "description":"例子裡有4人，他們都遷到別的地方，所以依照順序找人"},
+                {"file": "migrant_ancestor_preface.png", "description": "在序裡寫的是「奉七」，如果用這名在世傳找的話也許會找不到，因為可能是用字號，看下一張圖"},
+                {"file": "migrant_ancestor_story.png", "description": "在世傳裡要除了諱名之外要留意另外的稱呼，「壽」的行號是「奉七」，這就是序裡提到的那位，因規定要填諱名所以要填寫的是「壽」這個名"},
+                {"file": "migrant_ancestor_line.png", "description": "在世系圖裡也可以找到這個人，詳情參考上一張圖的說明"}
+            ],
             "answers": [
                 { "text": "有", "next": "5"},
                 { "text": "沒有", "return": "" }
             ]
         },
         "8": { 
-            "text": "搭配世系圖和世傳找到這些人的共同祖先",
-            "images": [""],
+            "text": "看世系圖和世傳找到這些人的共同始遷祖",
+            "warning": "如果是和一世祖是同一人的話就不用填寫，留空",
+            "images": [
+                {"file": "migrant_ancestor_differnt_generation.png", "description": "比如圖上的8位有些在不同世代遷到不同的地方，而且都有後代的紀錄，往上追查後可知第2位是他們的共同始遷祖，因此要填第2位"},
+                {"file": "migrant_ancestor_differnt_generation_one_line.png", "description": "如果是只有一條主線的話，那就要填最後一位，也就是第4位"}
+            ],
             "answers": [
-                { "text": "填寫" }
+                { "text": "填寫" },
+                { "text": "和一世祖是同一人(結束)", "return": "" }
+            ]
+        },
+        "9": { 
+            "text": "看世系圖的一世後有沒有共同的始遷祖？",
+            "images": [
+                {"file": "migrant_ancestor_differnt_generation.png", "description": "比如圖上的8位有些在不同世代遷到不同的地方，而且都有後代的紀錄，往上追查後可知第2位是他們的共同始遷祖，因此要填第2位"},
+                {"file": "migrant_ancestor_differnt_generation_one_line.png", "description": "如果是只有一條主線的話，那就要填最後一位，也就是第4位"}
+            ],
+            "answers": [
+                { "text": "有" },
+                { "text": "沒有", "return": "" }
             ]
         }
     }

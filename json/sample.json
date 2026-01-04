@@ -4,7 +4,7 @@
         "1→題號": { 
             "text": "問答題目內容",
             "warning": "注意事項內容",
-            "images": ["影像檔案名稱或說明文字"],
+            "images": [{"file":"影像檔案名稱", "description":"影像說明文字"}],
             "answers": [
                 { "text": "答案文字，並直接回傳答案且回到首頁"},
                 { "text": "到第2題", "next": "2" },
@@ -18,7 +18,7 @@
             "text": "",
             "images": [""],
             "answers": [
-                { "text": "是", "next": "pass" },
+                { "text": "是", "return": "pass" },
                 { "text": "不是", "next": "3" }
             ]
         }

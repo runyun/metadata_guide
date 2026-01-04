@@ -2,73 +2,68 @@
     "questions": {
         "1": { 
             "text": "版權頁有寫出版年嗎？",
-            "warnings": "通常在第1頁或最後1頁",
-            "images": [""],
+            "warning": "通常在第1頁或最後1頁",
+            "images": [
+                {"file": "publish_copyright.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
             ]
         },
         "2": { 
-            "text": "封面有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "書皮有寫出版年嗎？",
+            "images": [
+                {"file": "publish_cover.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "3" }
             ]
         },
         "3": { 
-            "text": "封底有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "書名頁有寫出版年嗎？",
+            "images": [
+                {"file": "publish_1st_page.png", "description": "這例子的出版年是光緒元年，換算成西元年後填入「1875」"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "4" }
             ]
         },
         "4": { 
-            "text": "書名頁有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "版心有寫出版年嗎？",
+            "images": [
+                {"file": "publish_gutter.png", "description": "這例子的出版年是光緒33年，換算成西元年後填入「1907」"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "5" }
             ]
         },
         "5": { 
-            "text": "版心有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "跋有寫出版年嗎？",
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "6" }
             ]
         },
         "6": { 
-            "text": "跋有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "最新的序(這次譜書寫好時寫的)有寫出版年嗎？",
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "7" }
             ]
         },
         "7": { 
-            "text": "最新的序(這次譜書寫好時寫的)有寫出版年嗎？",
-            "warnings": "",
-            "images": [""],
-            "answers": [
-                { "text": "有"},
-                { "text": "沒有", "next": "8" }
-            ]
-        },
-        "8": { 
             "text": "書上有世傳的地方最後約5頁的後代有任何年份資訊嗎？",
-            "images": ["有的話請填離現在最近的年份"],
+            "warning": ["有的話請填離現在最近的年份"],
+            "images": [
+                {"file": "publish_last_generation.png", "description": "這例子的最後幾頁裡離現代最近的是光緒乙酉，換算成西元年後填入「1885」"}
+            ],
             "answers": [
                 { "text": "有"},
-                { "text": "沒有", "next": "pass" }
+                { "text": "沒有", "return": "pass" }
             ]
         }
     }

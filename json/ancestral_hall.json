@@ -2,8 +2,7 @@
     "questions": {
         "1": { 
             "text": "在書皮上有看到「...堂」嗎？",
-            "warning": "郡號不算在內",
-            "images": [""],
+            "warning": "「郡」結尾的不算堂號",
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
@@ -11,7 +10,9 @@
         },
         "2": { 
             "text": "在版心有看到「...堂」嗎？",
-            "images": [""],
+            "images": [
+                {"file": "ancestral_hall_gutter.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "3" }
@@ -19,23 +20,39 @@
         }, 
         "3": { 
             "text": "在書名頁有看到「...堂」嗎？",
-            "images": [""],
+            "images": [
+                {"file": "ancestral_hall_1st_page.png"}
+            ],
             "answers": [
-                { "text": "有", "next": "5"},
+                { "text": "有", "next": "6"},
                 { "text": "沒有", "next": "4" }
             ]
         },
         "4": { 
             "text": "在祠堂圖有看到「...堂」嗎？",
-            "images": [""],
+            "images": [
+                {"file": "ancestral_hall_painting.png"}
+            ],
             "answers": [
                 { "text": "有"},
-                { "text": "沒有", "next": "pass" }
+                { "text": "沒有(結束)", "return": "" }
+            ]
+        },
+        "5": { 
+            "text": "在譜書裡有看到寫「...堂」的地方嗎？",
+            "warning": "若有多個的話只寫第一個看到的",
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有(結束)", "return": "" }
             ]
         }, 
-        "5": { 
+        "6": { 
             "text": "堂號下面有寫「藏」或「梓」字嗎？",
-            "images": [""],
+            "warning": "有這兩字而且版心或內文沒提到的話就不填，因為這堂號可能不是這一家的",
+            "images": [
+                {"file": "ancestral_hall_not_apply_1"},
+                {"file": "ancestral_hall_not_apply_2"}
+            ],
             "answers": [
                 { "text": "有(結束)", "return": ""},
                 { "text": "沒有" }

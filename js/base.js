@@ -4,9 +4,10 @@ const data = {
           "display": "譜名",
           "explain": "家譜的書名",
           "placeIndexes": [0, 1] }
-        ,{ "name": "sub_title",
+        ,{ "name": "subtitle",
           "display": "副譜名",
-          "explain": "輔助譜名，增加辨識度",
+          "explain": "對譜名的補充說明，用來交代範圍、版本、或修纂情況，增加辨識度",
+          "rules": ["若無副譜名則留空", "多個副譜名之間用「.」號隔開", "若有超過兩個姓氏要加「多種姓氏」"],
           "placeIndexes": [0, 1, 2, 3] }
         ,{ "name": "surname",
           "display": "姓氏",
@@ -28,7 +29,9 @@ const data = {
           "rules": [
             "填寫時需連名帶姓"
             , "只填寫一個人就好"
-            , "如果沒有的話就留空"],
+            , "如果沒有的話就留空"
+            , "編輯稱號優先順序:主修>主編>纂修>總編>編修>責任編輯"
+            ],
           "placeIndexes": [0, 3, 5, 9] }
         ,{ "name": "first_ancestor",
           "display": "一世祖",
@@ -44,7 +47,8 @@ const data = {
           "rules": [
             "填寫時需連名帶姓"
             , "填寫諱名"
-            , "只填寫一個人就好"],
+            , "只填寫一個人就好"
+            , "若是和一世祖同一人則留空"],
           "placeIndexes": [3, 7, 8] }
         ,{ "name": "place",
           "display": "譜籍地",
@@ -53,7 +57,10 @@ const data = {
         ,{ "name": "beg_year",
           "display": "起年",
           "explain": "家譜所記載的最早祖先的西元年",
-          "rules": ["西元年前的用負數"],
+          "rules": [
+            "西元年前的用負數表示，如西元前500年填「-500」"
+            , "若是第一位祖先比黃帝更早的話一律填「-2704」"
+            ,"若是找不到任何起年資訊請填「1」"],
           "placeIndexes": [8] }
         ,{ "name": "publish_year",
           "display": "出版年",

@@ -2,7 +2,10 @@
     "questions": {
         "1": { 
             "text": "在書皮有看到作者嗎？",
-            "images": [""],
+            "warning": "編輯稱號優先順序:主修>主編>纂修>總編>編修>責任編輯",
+            "images": [
+                {"file": "author_cover.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "2" }
@@ -10,47 +13,59 @@
         },
         "2": { 
             "text": "在版權頁有看到作者嗎？",
-            "warnings": "",
-            "images": [""],
+            "warning": "編輯稱號優先順序:主修>主編>纂修>總編>編修>責任編輯",
+            "images": [
+                {"file": "author_copyright.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "3" }
             ]
         },
         "3": { 
-            "text": "有修譜名單嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "有出版年時的修譜名單嗎？",
+            "warning": "編輯稱號優先順序:主修>主編>纂修>總編>編修>責任編輯。以上都沒有的話就用看到的第一個人",
+            "images": [
+                {"file": "author_list.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "4" }
             ]
         },
         "4": { 
-            "text": "有修譜理事會名單嗎？",
-            "warnings": "",
-            "images": [""],
+            "text": "有出版年時的修譜理事會名單或其他修譜名單嗎？",
+            "warning": "編輯稱號優先順序:主修>主編>纂修>總編>編修>責任編輯。以上都沒有的話就用看到的第一個人",
+            "images": [
+                {"file": "author_unofficial_list_1.png"},
+                {"file": "author_unofficial_list_2.png"},
+                {"file": "author_unofficial_list_3.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "5" }
             ]
         },
         "5": { 
-            "text": "有和出版年的年代相同的序，並且最後有署名的嗎？",
+            "text": "有出版年時的序，並且最後有署名的嗎？",
             "warnings": "",
-            "images": [""],
+            "images": [
+                {"file": "author_preface.png"}
+            ],
             "answers": [
                 { "text": "有"},
                 { "text": "沒有", "next": "6" }
             ]
         },
         "6": { 
-            "text": "有和出版年的年代相同的後記/跋，並且最後有署名的嗎？通常在書的最後幾頁",
+            "text": "有出版年時的後記/跋，並且最後有署名的嗎？通常在書的最後幾頁",
             "warnings": "",
-            "images": [""],
+            "images": [
+                {"file": "author_preface.png"}
+            ],
             "answers": [
                 { "text": "有"},
-                { "text": "沒有", "next": "pass" }
+                { "text": "沒有", "return": "pass" }
             ]
         }
     }

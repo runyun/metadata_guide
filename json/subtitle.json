@@ -1,0 +1,46 @@
+{
+    "questions": {
+        "1": { 
+            "text": "封面有較小的字體嗎？不包括堂號",
+            "warning": "若有多個副譜名就用「.」號隔開",
+            "images": [
+                {"file": "subtitle_smaller_font_1.png", "description": "這例子請填入「武岡.城步.新寧分支」。註:最後「分支譜」的譜字不用填因為譜名最後的「通譜」已經有「譜」字了"},
+                {"file": "subtitle_smaller_font_2.png", "description": "這例子請填入「青山資陽」"}
+            ],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "2" }
+            ]
+        },
+        "2": {
+            "text": "版心內容有不同於譜名的地方嗎？",
+            "images": [
+                {"file": "subtitle_gutter.png", "description": "這例子的譜名是「寧鄉白石楊氏譜」，那不同於譜名的版心內容就是「五修」，請填入「五修」"}
+            ],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "3" }
+            ]
+        },
+        "3": {
+            "text": "目錄標題有不同於譜名的地方嗎？",
+            "images": [
+                {"file": "subtitle_contents.png", "description": "這例子的譜名是版心的「金源王氏宗譜」，那不同於譜名的目錄標題就是「武口」，請填入「武口」"}
+            ],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "next": "4" }
+            ]
+        },
+        "4": {
+            "text": "這次出版的序言標題有不同於譜名的地方嗎？",
+            "images": [
+                {"file": "subtitle_preface.png", "description": "這例子的譜名是版心的「金源王氏宗譜」，那不同於譜名的序言標題就是「武口」，請填入「武口」"}
+            ],
+            "answers": [
+                { "text": "有"},
+                { "text": "沒有", "return": "pass" }
+            ]
+        }
+    }
+}
