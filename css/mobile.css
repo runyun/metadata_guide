@@ -1,0 +1,24 @@
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title p, .title input {
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.title input {
+  margin-left: 0;
+  width: 80%;
+}
+
+.arrow {
+  align-self: flex-end;
+  margin-top: 5px;
+}
+
+#metadataList {
+  width: 90%;
+}

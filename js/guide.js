@@ -108,24 +108,32 @@ function renderQuestion(data, id) {
         const description = document.createElement("p");
         description.className = "imageDescription";
 
-        // 第幾張
-        const counter = document.createElement("p");
+        // 第幾張（包含左右箭頭）
+        const counter = document.createElement("div");
         counter.className = "imageCounter";
+
+        // 中間文字
+        const counterText = document.createElement("span");
+        counterText.className = "counterText";
+        counter.appendChild(counterText);
 
         // 圖片
         const img = document.createElement("img");
         img.className = "questionImage";
 
+        img.onclick = () => {
+            openModal(img.src);
+        };
+
         function updateImage() {
             img.src = "../images/" + currentType + "/" + q.images[currentIndex].file;
             description.textContent = q.images[currentIndex].description || "";
-            counter.textContent = `(${currentIndex + 1} / ${total})`;
+            counterText.textContent = `(${currentIndex + 1} / ${total})`;
         }
 
         updateImage();
 
         imgBox.appendChild(description);
-        imgBox.appendChild(counter);
 
         const slider = document.createElement("div");
         slider.className = "imageSlider";
@@ -134,6 +142,7 @@ function renderQuestion(data, id) {
         if (total > 1) {
             const prevBtn = document.createElement("button");
             prevBtn.textContent = "←";
+            prevBtn.className = "counterBtn";
             prevBtn.onclick = () => {
                 currentIndex = (currentIndex - 1 + total) % total;
                 updateImage();
@@ -141,19 +150,20 @@ function renderQuestion(data, id) {
 
             const nextBtn = document.createElement("button");
             nextBtn.textContent = "→";
+            nextBtn.className = "counterBtn";
             nextBtn.onclick = () => {
                 currentIndex = (currentIndex + 1) % total;
                 updateImage();
             };
 
-            slider.appendChild(prevBtn);
-            slider.appendChild(img);
-            slider.appendChild(nextBtn);
-        } else {
-            // 只有一張圖，直接顯示圖片
-            slider.appendChild(img);
+            // 左箭頭 | 中間文字 | 右箭頭
+            counter.insertBefore(prevBtn, counterText);
+            counter.appendChild(nextBtn);
         }
 
+        slider.appendChild(img);
+
+        imgBox.appendChild(counter);
         imgBox.appendChild(slider);
         images.appendChild(imgBox);
     }
@@ -173,21 +183,11 @@ function renderAnswer() {
     const inputText = document.createElement("input");
     inputText.type = "text";
     inputText.placeholder = "請輸入答案";
-    inputText.maxLength = 20;
-    inputText.style.width = "100%";
-    inputText.style.fontSize = "16px";
-    inputText.style.padding = "8px";
-
     answerBtn.appendChild(inputText);
 
     const inputPage = document.createElement("input");
     inputPage.type = "text";
     inputPage.placeholder = "請輸入頁碼";
-    inputPage.maxLength = 20;
-    inputPage.style.width = "100%";
-    inputPage.style.fontSize = "16px";
-    inputPage.style.padding = "8px";
-
     answerBtn.appendChild(inputPage);
 
     // 按鈕區
@@ -204,7 +204,6 @@ function renderAnswer() {
     };
 
     btnBox.appendChild(doneBtn);
-    answerBtn.appendChild(btnBox);
 
     // 取消按鈕（回到上一個 renderQuestion）
     const cancelBtn = document.createElement("button");
@@ -215,9 +214,41 @@ function renderAnswer() {
         }
     };
 
-    answerBtn.appendChild(cancelBtn);
+    btnBox.appendChild(cancelBtn);
+
+    answerBtn.appendChild(btnBox);
 
     inputText.focus();
 }
+
+function openModal(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.style.display = 'block';
+    modalImg.src = src;
+    modalImg.classList.remove('zoomed');
+}
+
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.style.display = 'none';
+    modalImg.classList.remove('zoomed');
+}
+
+// 點擊模態框圖片放大
+document.getElementById('modalImage').onclick = function() {
+    this.classList.toggle('zoomed');
+};
+
+// 點擊叉叉關閉
+document.querySelector('.close').onclick = closeModal;
+
+// 點擊模態框背景關閉
+document.getElementById('imageModal').onclick = function(event) {
+    if (event.target === this) {
+        closeModal();
+    }
+};
 
 load();

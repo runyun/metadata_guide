@@ -145,7 +145,7 @@ function loadColumns() {
       html += `
           <div class="item">
               <div class="title">
-                  ${col.display}
+                  <p>${col.display}</p>
                   <input type="text" id="${col.name}Result" placeholder="請輸入${col.display}">
                   <input type="text" id="${col.name}Page" placeholder="頁數" >
                   <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
@@ -206,6 +206,8 @@ function fillFromLocalStorage() {
 
 
 function clearAll() {
+
+    if (!confirm("確定要清空所有已填寫的資料嗎？此動作無法復原")) return;
     const inputs = document.querySelectorAll('#metadataList input[type="text"]');
     inputs.forEach(input => {
         input.value = "";

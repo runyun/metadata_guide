@@ -55,7 +55,7 @@
       header.style.display = '';
       if (userDisplay) userDisplay.textContent = '已登入：' + user.name;
     } else {
-      loginBox.style.display = 'block';
+      loginBox.style.display = 'flex';
       appContent.style.display = 'none';
       header.style.display = 'none';
       if (userDisplay) userDisplay.textContent = '';

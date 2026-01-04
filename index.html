@@ -4,31 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="css/styles.css"> 
+    <link rel="stylesheet" href="css/mobile.css" media="(max-width: 768px)">
 
     <title>Guide - 主頁</title>
 </head>
 <body>
         <header>
+            <button id="viewMetadataBtn">查看清單</button>
             <div id="userDisplayArea">
                 <span id="userDisplay"></span>
                 <button id="logoutBtn">登出</button>
-                <button id="viewMetadataBtn" style="margin-left:1rem;">查看清單</button>
             </div>
         </header>
 
         <div id="loginBox">
-            <label>名稱： <input id="loginName" placeholder="輸入你的名稱"></label>
+            <p>名稱</p>
+            <input id="loginName" placeholder="輸入你的名稱">
             <button id="loginBtn">登入</button>
         </div>
 
-        <div id="homeContainer" style="display:none;">
+        <div id="homeContainer">
             <div id="metadataList"></div>
-                        <div id="controls" style="margin-top:1rem;">
-                            <button id="submitBtn">送出</button>
-                            <button id="clearBtn" onclick="clearAll()">清空</button>
-                            <span id="submitResult" style="margin-left:1rem;color:green"></span>
-                        </div>
+            <div id="controls">
+                <button id="clearBtn" onclick="clearAll()">清空</button>
+                <button id="submitBtn">送出</button>
+                <span id="submitResult"></span>
+            </div>
         </div>
 
 
