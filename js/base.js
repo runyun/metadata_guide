@@ -1,5 +1,5 @@
 const allPlaces = [
-  "封面" // 0
+  "書皮" // 0
   , "版心"
   , "目錄" // 2
   , "序言"
@@ -29,19 +29,6 @@ function toggleContent(event) {
   arrow.textContent = "提示 " + toggleArrow;
 }
 
-
-function exportResult() {
-  const title = document.getElementById('titleResult').value;
-  const surname = document.getElementById('surnameResult').value;
-  const volume = document.getElementById('volumeResult').value;
-
-  const result= [title, surname, volume].join(', ');
-
-  navigator.clipboard.writeText(result);
-
-  document.getElementById("exportResult").textContent = "已複製結果到剪貼簿：" + result;
-}
-
 function renderRules(rules) {
   if (!Array.isArray(rules) || rules.length === 0) return '';
 
@@ -58,6 +45,12 @@ function loadColumns() {
 
   for (const col of data.columns) {
     const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join('、 ') : allPlaces.join('、 ');
+    let guideHintHtml = '';
+    if (col.hasGuide) {
+      guideHintHtml = `<div class="guideHint">
+          <a href="guide.html?type=${col.name}&typeDisplay=${col.display}">開始導覽 ▶</a>
+      </div>`;
+    }
 
       html += `
           <div class="item">
@@ -73,31 +66,11 @@ function loadColumns() {
                       <p>最可能出現的地方：${places}</p>
                       ${renderRules(col.rules)}
                   </div>
-                  <div class="guideHint">
-                      <a href="guide.html?type=${col.name}&typeDisplay=${col.display}">開始導覽 ▶</a>
-                  </div>
+                  ${guideHintHtml}
               </div>
           </div>
       `;
   }
-
-  const memo = `
-          <div class="item">
-              <div class="title">
-                  備註
-                  <input type="text" id="memo" placeholder="請輸入備註">
-                  <span></span>
-                  <span class="arrow" onclick="toggleContent(event)">提示 ▶</span>
-              </div>
-              <div class="content">
-                  <div>
-                      <p>說明：譜書需要特別注意的事情，比如:缺幾本、泡過水、有幾頁毀損…等</p>
-                  </div>
-              </div>
-          </div>
-      `;
-  
-  html += memo;
 
   document.getElementById("metadataList").innerHTML = html;
 

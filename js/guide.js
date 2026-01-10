@@ -78,8 +78,16 @@ function renderQuestion(data, id) {
             } else if (ans.return !== undefined) {
                 if (ans.return === "pass") {
                     backToIndex('?.?');
+
                 } else {
-                    backToIndex(ans.return);
+                    let returnValue = ans.return;
+                    let replaceIndex = returnValue.indexOf("%");
+
+                    if (replaceIndex !== -1) {
+                        returnValue = returnValue.replace("%", "");
+                    }
+                    
+                    backToIndex(returnValue);
                 }
 
             } else {
