@@ -231,16 +231,34 @@ function renderAnswer(next) {
     title.textContent = "請輸入你的回答";
     answerBtn.appendChild(title);
 
-    // 單行輸入框
-    const inputText = document.createElement("input");
-    inputText.type = "text";
-    inputText.placeholder = "請輸入答案";
-    answerBtn.appendChild(inputText);
+    if (currentType === 'volumes') {
+        // 清單類型輸入
+        const listContainer = document.createElement("div");
+        listContainer.id = "volumesList";
+        listContainer.className = "volumes-list";
 
-    const inputPage = document.createElement("input");
-    inputPage.type = "text";
-    inputPage.placeholder = "請輸入頁碼";
-    answerBtn.appendChild(inputPage);
+        // 新增第一個輸入框
+        addVolumeInput(listContainer);
+
+        // 新增按鈕
+        const addBtn = document.createElement("button");
+        addBtn.textContent = "新增一行";
+        addBtn.onclick = () => addVolumeInput(listContainer);
+        answerBtn.appendChild(listContainer);
+        answerBtn.appendChild(addBtn);
+
+    } else {
+        // 單行輸入框
+        const inputText = document.createElement("input");
+        inputText.type = "text";
+        inputText.placeholder = "請輸入答案";
+        answerBtn.appendChild(inputText);
+
+        const inputPage = document.createElement("input");
+        inputPage.type = "text";
+        inputPage.placeholder = "請輸入頁碼";
+        answerBtn.appendChild(inputPage);
+    }
 
     // 按鈕區
     const btnBox = document.createElement("div");
@@ -250,12 +268,21 @@ function renderAnswer(next) {
     continueBtn.textContent = next === undefined ? "完成" : "繼續下一題 ";
 
     continueBtn.onclick = () => {
-        let answerText = inputText.value.trim();
-        let answerPage = inputPage.value.trim();
+        let answerText = "";
+        let answerPage = "";
         const question = questionData.questions[currentId].answers[0];
         const answerId = question.save || null;
         const defaultText = question.default || "";
 
+        if (currentType === 'volumes') {
+            // 收集清單資料
+            const inputs = document.querySelectorAll("#volumesList input");
+            const values = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== "");
+            answerText = values.join("@");
+        } else {
+            answerText = document.querySelector("input[placeholder='請輸入答案']").value.trim();
+            answerPage = document.querySelector("input[placeholder='請輸入頁碼']").value.trim();
+        }
 
         if (next === undefined) {  
             if(question.save){
@@ -301,7 +328,28 @@ function renderAnswer(next) {
 
     answerBtn.appendChild(btnBox);
 
-    inputText.focus();
+    if (currentType !== 'volumes') {
+        document.querySelector("input[placeholder='請輸入答案']").focus();
+    }
+}
+
+function addVolumeInput(container) {
+    const inputContainer = document.createElement("div");
+    inputContainer.className = "volume-input-container";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "請輸入卷冊內容";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "刪除";
+    deleteBtn.onclick = () => {
+        container.removeChild(inputContainer);
+    };
+
+    inputContainer.appendChild(input);
+    inputContainer.appendChild(deleteBtn);
+    container.appendChild(inputContainer);
 }
 
 function openModal(src) {

@@ -2,10 +2,27 @@
   async function collectFormData() {
     const inputs = document.querySelectorAll('#metadataList input[type="text"]');
     const data = {};
+    
+    // 先處理 volumes 清單
+    const volumesList = document.getElementById('volumesList');
+    if (volumesList) {
+      const volumeInputs = volumesList.querySelectorAll('input[type="text"]');
+      const volumeValues = Array.from(volumeInputs).map(input => input.value || null).filter(val => val !== null && val.trim() !== '');
+      data.volumes = volumeValues.join('@');
+    }
+    
+    // 處理其他輸入框
     inputs.forEach(input => {
-      const key = input.id.replace(/Result$/, '');
-      data[key] = input.value || null;
+      const key = input.id.replace(/Result\d*$/, '').replace(/Page$/, '');
+      if (key && key !== 'volumes') {
+        if (input.id.endsWith('Page')) {
+          data[key + '_page'] = input.value || null;
+        } else {
+          data[key] = input.value || null;
+        }
+      } 
     });
+    
     return data;
   }
 
