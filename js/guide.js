@@ -73,21 +73,30 @@ function renderQuestion(data, id) {
 
         btn.onclick = () => {
             if (ans.next) {
+
+                if(ans.save){
+                    renderAnswer(ans.next);
+                    return;
+                }
                 renderQuestion(data, ans.next);
 
             } else if (ans.return !== undefined) {
                 if (ans.return === "pass") {
                     backToIndex('?.?');
 
-                } else {
-                    let returnValue = ans.return;
-                    let replaceIndex = returnValue.indexOf("%");
+                } if (ans.return.includes("%")) {
+                    renderAnswer();
 
-                    if (replaceIndex !== -1) {
-                        returnValue = returnValue.replace("%", "");
+                } else {
+
+                    const { answers, pages } = assemble_total_number_answers();
+
+                    if (answers != '') {
+                        backToIndex(answers, pages);
+                        return;
                     }
-                    
-                    backToIndex(returnValue);
+
+                    backToIndex(ans.return);
                 }
 
             } else {
@@ -178,7 +187,42 @@ function renderQuestion(data, id) {
 
 }
 
-function renderAnswer() {
+let total_number_answers = {};
+
+function assemble_total_number_answers() {
+    if (Object.keys(total_number_answers).length === 0) {
+        return { answers: "", pages: "" };
+    }
+
+    const sortedKeys = Object.keys(total_number_answers)
+        .sort((a, b) => a - b);
+
+    const answers = sortedKeys
+        .map(key => total_number_answers[key].answer)
+        .join("");
+
+    const pages = sortedKeys
+    .map(key => total_number_answers[key].page)
+    .filter(page => page != null && page !== "")
+    .join(", ");
+
+
+    return { answers, pages };
+}
+
+function repalce_default_text(defaultText, answerText) {
+    let returnText = '';
+
+    const replaceIndex = defaultText.indexOf("%");
+    if (replaceIndex !== -1) {
+        returnText = defaultText.replace("%", answerText);
+    }
+
+    return returnText;
+}
+
+
+function renderAnswer(next) {
     const answerBtn = document.getElementById("answerBtn");
     answerBtn.innerHTML = ""; // 清空畫面
 
@@ -202,16 +246,47 @@ function renderAnswer() {
     const btnBox = document.createElement("div");
     btnBox.className = "btnBox";
 
-    const doneBtn = document.createElement("button");
-    doneBtn.textContent = "完成";
+    const continueBtn = document.createElement("button");
+    continueBtn.textContent = next === undefined ? "完成" : "繼續下一題 ";
 
-    doneBtn.onclick = () => {
-        const answerText = inputText.value.trim();
-        const answerPage = inputPage.value.trim();
-        backToIndex(answerText, answerPage);
+    continueBtn.onclick = () => {
+        let answerText = inputText.value.trim();
+        let answerPage = inputPage.value.trim();
+        const question = questionData.questions[currentId].answers[0];
+        const answerId = question.save || null;
+        const defaultText = question.default || "";
+
+
+        if (next === undefined) {  
+            if(question.save){
+                total_number_answers[answerId] = {answer:answerText, page:answerPage};
+            }
+
+            const { answers, pages } = assemble_total_number_answers();
+            if (answers != '') {
+                answerText = answers ;
+                answerPage = pages;
+            }
+
+            replaceText = repalce_default_text( defaultText, answerText);
+            if(replaceText){
+                answerText = replaceText;
+            }
+
+            backToIndex(answerText, answerPage);
+
+        } else {
+            if (defaultText) {
+                answerText = repalce_default_text(defaultText, answerText);
+            }
+
+            total_number_answers[answerId] = {answer:answerText, page:answerPage};
+
+            renderQuestion(questionData, next);
+        }
     };
 
-    btnBox.appendChild(doneBtn);
+    btnBox.appendChild(continueBtn);
 
     // 取消按鈕（回到上一個 renderQuestion）
     const cancelBtn = document.createElement("button");
