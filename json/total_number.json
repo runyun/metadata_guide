@@ -2,7 +2,6 @@
     "questions": {
         "1": { 
             "text": "有目錄嗎？",
-            "images": [""],
             "answers": [
                 { "text": "有", "next": "2" },
                 { "text": "沒有", "next": "2" }
@@ -11,7 +10,11 @@
         "2": {
             "text": "有沒有任何譜書的編輯單位？如:卷、冊、輯…等？",
             "warning": "可以找找書皮、版心、目錄有沒有這些資訊",
-            "images": [""],
+            "images": [
+                {"file": "total_number_cover_juan.png", "description": "書皮上有標示「卷」字"},
+                {"file": "total_number_gutter_contents.png", "description": "目錄或版心上有標示「卷」字"},
+                {"file": "total_number_contents_no_unit.png", "description": "沒有任何單位"}
+            ],
             "answers": [
                 { "text": "有", "next": "3" },
                 { "text": "沒有", "next": "17" }
@@ -20,7 +23,6 @@
         "3": {
             "text": "能確定這套家譜完整內容嗎？",
             "warning": "完整的意思是你知道這套家譜總共有幾卷/冊/輯…等，如果你知道他總共有3冊但是實際有缺第2冊，那也算是知道完整內容",
-            "images": [""],
             "answers": [
                 { "text": "確定完整", "next": "4" },
                 { "text": "不確定是不是完整", "next": "20" }
@@ -29,7 +31,10 @@
         "4": {
             "text": "編輯單位有任何包含「卷」的部份嗎？",
             "warning": "有可能大單位不是「卷」，是別的單位，但是裡面有包含「卷」這個單位",
-            "images": [""],
+            "images": [
+                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
+                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
+            ],
             "answers": [
                 { "text": "有" , "next": "6" },
                 { "text": "沒有", "next": "5" }
@@ -38,14 +43,16 @@
         "5": {
             "text": "填寫這套家譜的數量和單位",
             "warning": "比如:總共有「2冊」、「4輯」…等",
-            "images": [""],
             "answers": [
                 { "text": "填寫"}
             ]
         }, 
         "6": {
             "text": "有卷首嗎？",
-            "images": [""],
+            "warning": "卷首和卷1不是一樣的",
+            "images": [
+                {"file": "total_number_include_volumn_one.png"}
+            ],
             "answers": [
                 { "text": "有", "next": "7" },
                 { "text": "沒有", "next": "10" }
@@ -53,7 +60,10 @@
         },
         "7": {
             "text": "卷首後有卷1還是直接卷2？",
-            "images": [""],
+            "images": [
+                {"file": "total_number_include_volumn_one.png", "description": "卷首後有卷1"},
+                {"file": "total_number_not_include_volumn_one.png", "description": "卷首後沒卷1，直接卷2"}
+            ],
             "answers": [
                 { "text": "有卷1", "next": "8"},
                 { "text": "沒卷1，直接卷2", "next": "9" }
@@ -62,7 +72,9 @@
         "8": {
             "text": "填寫卷首數量的阿拉伯數字",
             "warning": "如果是類似「卷首上、下」的話那就算「2」個卷首",
-            "images": [""],
+            "images": [
+                {"file": "total_number_include_volumn_one.png", "description": "這例子只有1個卷首，填「1」"}
+            ],
             "answers": [
                 { "text": "填寫", "save": "1",  "next": "10", "default": "首%卷" }
             ]
@@ -70,36 +82,48 @@
         "9": {
             "text": "填寫卷首數量的阿拉伯數字",
             "warning": "如果是類似「卷首上、下」的話那就算「2」個卷首",
-            "images": [""],
+            "images": [
+                {"file": "total_number_not_include_volumn_one.png", "description": "這例子只有1個卷首，填「1」"}
+            ],
             "answers": [
                 { "text": "填寫", "save": "1", "next": "10", "default": "含首%卷" }
             ]
         },
         "10": {
             "text": "有卷末嗎？",
-            "images": [""],
-            "answers": [
+            "warning": "卷末是最後一卷有特別名稱的意思，不是「卷+數字」，可能是卷末、卷尾…",
+            "images": [
+                {"file": "total_number_contents_last_volume.png"}
+            ],
+                        "answers": [
                 { "text": "有", "next":"11"},
                 { "text": "沒有", "next": "12" }
             ]
         },
         "11": {
-            "text": "填寫卷末數量",
-            "images": [""],
+            "text": "填寫卷末數量的阿拉伯數字",
+            "images": [
+                {"file": "total_number_contents_last_volume.png", "description": "這例子只有1個卷末，填「1」"}
+            ],
             "answers": [
                 { "text": "填寫", "save": "2",  "next": "12", "default": "末%卷"}
             ]
         },
         "12": {
-            "text": "填寫不包含卷首和卷末的卷數",
-            "images": [""],
+            "text": "填寫不包含卷首和卷末卷數的阿拉伯數字",
+            "images": [
+                {"file": "total_number_contents_last_volume.png", "description": "這例子可以看到在卷末前有「卷4」，填「4」"}
+            ],
             "answers": [
                 { "text": "填寫", "save": "0",  "next": "13", "default": "%卷" }
             ]
         },
         "13": {
             "text": "卷的單位有被包含在任何其他單位裡面嗎？比如:冊、輯…等",
-            "images": [""],
+            "images": [
+                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
+                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
+            ],
             "answers": [
                 { "text": "有", "next": "14"},
                 { "text": "沒有", "next": "15"}
@@ -108,14 +132,17 @@
         "14": {
             "text": "填寫全部有幾個大單位",
             "warning": "比如:總共有「2冊」、「4輯」…等",
-            "images": [""],
+            "images": [
+                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，是中文字表示的「利部、貞部」，看他有幾部就填「數字+部」"},
+                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，算他總共有幾冊，假設這例子就只有6冊，填「6冊」"}
+            ],
             "answers": [
                 { "text": "填寫", "save": "3",  "next": "15"}
             ]
         },
         "15": {
             "text": "有不在目錄裡的內容嗎？",
-            "images": [""],
+            "warning": "有時候會有一些附錄，或是別冊，但目錄沒寫到，是後來的人加上去的",
             "answers": [
                 { "text": "有", "next": "16"},
                 { "text": "沒有(結束)", "return": ""}
@@ -123,7 +150,7 @@
         },
         "16": { 
             "text": "填寫不在目錄裡的內容和數量",
-            "images": [""],
+            "warning": "比如:「詩集1卷」、「黃山世系4冊」…",
             "answers": [
                 { "text": "填寫", "save": "4"}
             ]
@@ -131,7 +158,6 @@
         "17": { 
             "text": "能確定這套家譜完整內容嗎？",
             "warning": "完整的意思是你知道這套家譜的總內容包括什麼，或是你認為這套家譜是完整的",
-            "images": [""],
             "answers": [
                 { "text": "確定完整", "next": "18" },
                 { "text": "不確定是不是完整", "next": "19" }
@@ -140,7 +166,6 @@
         "18": {
             "text": "填寫總共有幾本？",
             "warning": "若是不同本但裝訂在一起的話要分開計算",
-            "images": [""],
             "answers": [
                 { "text": "填寫", "default": "不分卷全%冊"}
             ]
@@ -148,7 +173,6 @@
         "19": {
             "text": "填寫總共有幾本？",
             "warning": "若是不同本但裝訂在一起的話要分開計算",
-            "images": [""],
             "answers": [
                 { "text": "填寫", "default": "不分卷存%冊"}
             ]
@@ -156,7 +180,6 @@
         "20": { 
             "text": "填寫編輯單位",
             "warning": "比如:卷、冊、輯…等",
-            "images": [""],
             "answers": [
                 { "text": "填寫", "default": "總%數不詳" }
             ]
