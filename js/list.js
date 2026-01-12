@@ -45,7 +45,7 @@
       // Header
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
-      headerRow.innerHTML = '<th>建立時間</th>' + data.columns.map(col => `<th>${col.display}</th>`).join('');
+      headerRow.innerHTML = '<th>編號</th><th>建立時間</th>' + data.columns.map(col => `<th>${col.display}</th>`).join('');
       thead.appendChild(headerRow);
       table.appendChild(thead);
 
@@ -54,7 +54,7 @@
       for (const row of rows) {
         const tr = document.createElement('tr');
         const created = fmtDate(row.created_at);
-        tr.innerHTML = `<td>${created}</td>` + data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
+        tr.innerHTML = `<td>${row.id}</td><td>${created}</td>` + data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);
