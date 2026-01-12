@@ -79,13 +79,16 @@ function renderQuestion(data, id) {
                     return;
                 }
                 renderQuestion(data, ans.next);
+                return;
 
             } else if (ans.return !== undefined) {
                 if (ans.return === "pass") {
                     backToIndex('?.?');
+                    return;
 
                 } if (ans.return.includes("%")) {
                     renderAnswer();
+                    return;
 
                 } else {
 
@@ -97,10 +100,12 @@ function renderQuestion(data, id) {
                     }
 
                     backToIndex(ans.return);
+                    return;
                 }
 
             } else {
                 renderAnswer();
+                return;
             }
         };
 
