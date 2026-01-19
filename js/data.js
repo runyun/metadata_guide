@@ -18,7 +18,7 @@ const data = {
           "display": "姓氏",
           "explain": "家譜裡包含什麼姓氏的世系？",
           "rules": [
-            "最多記載兩個姓氏"
+            "最多記載兩個姓氏，並用「&」區隔，如「張&李」",
             , "若超過兩個姓氏只錄最主要的那1個，並在副譜名加「多種姓氏」"],
           "placeIndexes": [0, 1, 4],
           "hasGuide": true }
@@ -66,6 +66,9 @@ const data = {
         ,{ "name": "place",
           "display": "譜籍地",
           "explain": "一世祖或始遷祖遷到的現代地名",
+          "rules": [
+            "最多填3個地點，中間用「&」區隔，如「中國泉州&臺灣桃園」"
+          ],
           "placeIndexes": [3, 8],
           "hasGuide": true }
         ,{ "name": "beg_year",

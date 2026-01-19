@@ -123,7 +123,7 @@ function fillFromLocalStorage() {
   for (const key in stored) {
     if (key === 'volumes') {
       const list = document.getElementById(key + "List");
-      const values = stored[key].value ? stored[key].value.split('@') : [];
+      const values = stored[key].value ? stored[key].value.split('&') : [];
       const containers = list.querySelectorAll('.volume-input-container');
       
       // 移除現有的輸入框，除了第一個

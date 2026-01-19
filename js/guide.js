@@ -283,7 +283,7 @@ function renderAnswer(next) {
             // 收集清單資料
             const inputs = document.querySelectorAll("#volumesList input");
             const values = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== "");
-            answerText = values.join("@");
+            answerText = values.join("&");
         } else {
             answerText = document.querySelector("input[placeholder='請輸入答案']").value.trim();
             answerPage = document.querySelector("input[placeholder='請輸入資訊所在的頁碼']").value.trim();

@@ -8,7 +8,7 @@
     if (volumesList) {
       const volumeInputs = volumesList.querySelectorAll('input[type="text"]');
       const volumeValues = Array.from(volumeInputs).map(input => input.value || null).filter(val => val !== null && val.trim() !== '');
-      data.volumes = volumeValues.join('@');
+      data.volumes = volumeValues.join('&');
     }
     
     // 處理其他輸入框
