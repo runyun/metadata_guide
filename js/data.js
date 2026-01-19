@@ -103,6 +103,7 @@ const data = {
         ,{ "name": "donor_contact",
           "display": "捐贈者聯絡方式",
           "explain": "捐贈者的聯絡方式，可能是電話、地址、社群網站…", 
+          "rules": ["如有多個資訊請用「&」區隔，如「0912-345678&test@gmail」"],
           "placeIndexes": [0],
           "hasGuide": false }
         ,{ "name": "memo",
