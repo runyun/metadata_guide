@@ -261,7 +261,7 @@ function renderAnswer(next) {
 
         const inputPage = document.createElement("input");
         inputPage.type = "text";
-        inputPage.placeholder = "請輸入頁碼";
+        inputPage.placeholder = "請輸入資訊所在的頁碼";
         answerBtn.appendChild(inputPage);
     }
 
@@ -286,7 +286,7 @@ function renderAnswer(next) {
             answerText = values.join("@");
         } else {
             answerText = document.querySelector("input[placeholder='請輸入答案']").value.trim();
-            answerPage = document.querySelector("input[placeholder='請輸入頁碼']").value.trim();
+            answerPage = document.querySelector("input[placeholder='請輸入資訊所在的頁碼']").value.trim();
         }
 
         if (next === undefined) {  

@@ -89,7 +89,7 @@ function loadColumns() {
     } else {
       inputHtml = `
         <input type="text" id="${col.name}Result" placeholder="請輸入${col.display}">
-        <input type="text" id="${col.name}Page" placeholder="頁數" >
+        <input type="text" id="${col.name}Page" placeholder="資訊所在頁碼" >
       `;
     }
 
