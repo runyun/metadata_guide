@@ -83,7 +83,14 @@
       loginBox.style.display = 'none';
       appContent.style.display = '';
       header.style.display = '';
-      if (userDisplay) userDisplay.textContent = '已登入：' + user.name;
+      if (userDisplay) {
+        let text = '已登入：' + user.name;
+        if (user.roles && user.roles.length) {
+          const roleNames = user.roles.map(r=>r.name || r.id);
+          text += ' [' + roleNames.join(', ') + ']';
+        }
+        userDisplay.textContent = text;
+      }
     } else {
       loginBox.style.display = 'flex';
       appContent.style.display = 'none';

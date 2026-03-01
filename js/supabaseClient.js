@@ -21,20 +21,49 @@
   window.supabaseClient = window.supabase.createClient(url, key);
 
   window.supabaseApi = {
+    // return the user record along with roles, optional organization,
+    // and any affiliations (which include organization + location)
     async findUserByName(name) {
+      // basic user fetch
       const { data, error } = await window.supabaseClient
         .from('users')
-        .select('*')
+        .select('name, id')
         .eq('name', name)
         .limit(1);
-      if (data.length == 0) {
-        throw new Error('沒有這個使用者');
-
-      } else if (error) {
+      if (error) {
         throw new Error(error.message);
       }
+      if (!data || data.length === 0) {
+        return null;
+      }
 
-      return (data && data[0]) || null;
+      const user = data[0];
+
+      // fetch roles for this user via user_roles join
+      const { data: roleLinks, error: rolesErr } = await window.supabaseClient
+        .from('user_roles')
+        .select('role_id, roles(id, name)')
+        .eq('user_id', user.id);
+      if (rolesErr) {
+        throw new Error(rolesErr.message);
+      }
+      user.roles = (roleLinks || []).map((r) => r.roles || { id: r.role_id });
+
+      // load affiliation relations (organization + location)
+      const { data: affLinks, error: affErr } = await window.supabaseClient
+        .from('affiliation')
+        .select('assigned_at, organization_id, organizations(id, name), location_id, locations(id, name)')
+        .eq('user_id', user.id);
+      if (affErr) {
+        throw new Error(affErr.message);
+      }
+      user.affiliations = (affLinks || []).map((a) => ({
+        assigned_at: a.assigned_at,
+        organization: a.organizations || { id: a.organization_id },
+        location: a.locations || { id: a.location_id }
+      }));
+
+      return user;
     },
 
     async createUser(name) {
@@ -44,7 +73,23 @@
         .select()
         .limit(1);
       if (error) throw error;
-      return (data && data[0]) || null;
+      const user = (data && data[0]) || null;
+      if (!user) return null;
+      // newly created user has no roles/org/affiliations yet, but apply same structure
+      user.roles = [];
+      user.affiliations = [];
+      if (user.organization_id) {
+        const { data: orgData, error: orgErr } = await window.supabaseClient
+          .from('organizations')
+          .select('*')
+          .eq('id', user.organization_id)
+          .limit(1);
+        if (orgErr) {
+          throw new Error(orgErr.message);
+        }
+        user.organization = (orgData && orgData[0]) || null;
+      }
+      return user;
     },
 
   };
