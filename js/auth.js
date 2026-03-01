@@ -30,6 +30,9 @@
     }
     saveUser(user);
     renderUserState();
+    // start idle timer and track activity whenever user logs in
+    resetInactivityTimer();
+    registerActivityListeners();
     if (typeof window.onUserLogin === 'function') window.onUserLogin(user);
     return user;
   }
@@ -37,7 +40,34 @@
   function logout() {
     clearUser();
     renderUserState();
+    clearTimeout(inactivityTimer);
+    // optionally remove activity listeners
+    const events = ['mousemove', 'keydown', 'click', 'touchstart'];
+    events.forEach((ev) => {
+      document.removeEventListener(ev, resetInactivityTimer);
+    });
     if (typeof window.onUserLogout === 'function') window.onUserLogout();
+  }
+
+  // idle tracking --------------------------------------------------------
+  const INACTIVITY_LIMIT = 60 * 60 * 1000; // 60 minutes
+  let inactivityTimer = null;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    if (getCurrentUser()) {
+      inactivityTimer = setTimeout(() => {
+        alert('閒置時間過長，已自動登出');
+        logout();
+      }, INACTIVITY_LIMIT);
+    }
+  }
+
+  function registerActivityListeners() {
+    const events = ['mousemove', 'keydown', 'click', 'touchstart'];
+    events.forEach((ev) => {
+      document.addEventListener(ev, resetInactivityTimer);
+    });
   }
 
   function renderUserState() {
@@ -87,6 +117,11 @@
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
     renderUserState();
+    // if user was already logged in when page loaded, start tracking
+    if (getCurrentUser()) {
+      resetInactivityTimer();
+      registerActivityListeners();
+    }
   });
 
   window.guideAuth = {
