@@ -178,8 +178,55 @@ function clearAll() {
 }
 
 
+function renderControlsForUser(user) {
+  const controls = document.getElementById('controls');
+  if (!controls) return;
+
+  // decide which set of buttons to show based on roles
+  const roles = (user.roles || []).map(r => r.name);
+  let html = '';
+
+  if (roles.includes('inputter')) {
+    html = `
+      <button id="clearBtn" onclick="if(confirm('確定要清空所有已填寫的資料嗎？此動作無法復原')) clearAll();">清空</button>
+      <button id="submitBtn">送審核</button>
+      <button id="saveBtn">儲存</button>
+      <span id="submitResult"></span>
+    `;
+  } else if (roles.includes('reviewer')) {
+    html = `
+      <button id="submitBtn">送結案</button>
+      <button id="returnBtn">退回</button>
+      <span id="submitResult"></span>
+    `;
+  } else if (roles.includes('approver')) {
+    html = `
+      <button id="submitBtn">結案</button>
+      <button id="returnBtn">退回</button>
+      <span id="submitResult"></span>
+    `;
+  } else {
+    // default to basic submit behavior
+    html = `
+      <button id="clearBtn" onclick="if(confirm('確定要清空所有已填寫的資料嗎？此動作無法復原')) clearAll();">清空</button>
+      <button id="submitBtn">送出</button>
+      <span id="submitResult"></span>
+    `;
+  }
+
+  controls.innerHTML = html;
+
+  // let submit.js attach its handlers (if available)
+  if (typeof window.setupSubmitHandlers === 'function') {
+    window.setupSubmitHandlers();
+  }
+}
+
 function initApp() {
   loadColumns();
+  // render controls once columns are loaded and user available
+  const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
+  if (user) renderControlsForUser(user);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

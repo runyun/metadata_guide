@@ -69,15 +69,41 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function setupSubmitHandlers() {
+    // attach to whatever controls currently exist
     const submitBtn = document.getElementById('submitBtn');
-    if (submitBtn) submitBtn.addEventListener('click', submitMetadata);
+    if (submitBtn) {
+      submitBtn.removeEventListener('click', submitMetadata);
+      submitBtn.addEventListener('click', submitMetadata);
+    }
+    const returnBtn = document.getElementById('returnBtn');
+    if (returnBtn) {
+      returnBtn.removeEventListener('click', returnMetadata);
+      returnBtn.addEventListener('click', returnMetadata);
+    }
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+      saveBtn.removeEventListener('click', saveMetadata);
+      saveBtn.addEventListener('click', saveMetadata);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupSubmitHandlers();
 
     // if user logs in/out, clear messages
     window.onUserLogin = function(user) {
       const resultSpan = document.getElementById('submitResult');
       if (resultSpan) resultSpan.textContent = '';
+      // reattach handlers since buttons may have been rebuilt
+      setupSubmitHandlers();
     };
   });
+
+  // expose helpers so other scripts can call or override if needed
+  window.submitMetadata = submitMetadata;
+  window.returnMetadata = function() { alert('退回功能尚未實作'); };
+  window.saveMetadata = function() { alert('儲存功能尚未實作'); };
+  window.setupSubmitHandlers = setupSubmitHandlers;
 
 })();
