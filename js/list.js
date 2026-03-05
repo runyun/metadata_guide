@@ -28,8 +28,8 @@
     try {
       const { data: rows, error } = await window.supabaseClient
         .from('metadata')
-        .select('id, user_id, data, created_at')
-        .order('created_at', { ascending: false })
+        .select('id, data')
+        .order('id', { ascending: false })
         .limit(200);
 
       if (error) throw error;
