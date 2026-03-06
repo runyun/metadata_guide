@@ -284,6 +284,80 @@
     sessionStorage.removeItem('currentBookEntryId');
   }
 
+  async function deleteRecord() {
+    // Delete record that is in editing status and was added by current user
+    // Only if not yet in book_approvals
+    
+    const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
+    if (!user) {
+      alert('請先登入');
+      location.href = 'index.html';
+      return;
+    }
+
+    const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
+    if (!bookEntryId) {
+      alert('未找到要刪除的記錄');
+      return;
+    }
+
+    const deleteBtn = document.getElementById('deleteBtn');
+    const resultSpan = document.getElementById('submitResult');
+    if (deleteBtn) deleteBtn.disabled = true;
+    if (resultSpan) resultSpan.textContent = '';
+
+    try {
+      // Get the book_id first
+      const { data: entryData, error: entryError } = await window.supabaseClient
+        .from('book_entries')
+        .select('book_id')
+        .eq('id', bookEntryId)
+        .single();
+
+      if (entryError) throw entryError;
+      const bookId = entryData.book_id;
+
+      // Delete from book_entries
+      const { error: deleteEntryError } = await window.supabaseClient
+        .from('book_entries')
+        .delete()
+        .eq('id', bookEntryId);
+
+      if (deleteEntryError) throw deleteEntryError;
+
+      // Delete from metadata
+      const { error: deleteMetaError } = await window.supabaseClient
+        .from('metadata')
+        .delete()
+        .eq('id', bookId);
+
+      if (deleteMetaError) throw deleteMetaError;
+
+      if (resultSpan) {
+        resultSpan.style.color = 'green';
+        resultSpan.textContent = '記錄已成功刪除';
+      }
+
+      // Clear all form data
+      if (typeof clearAll === 'function') {
+        clearAll();
+      }
+
+      // Clear session storage
+      sessionStorage.removeItem('currentBookEntryId');
+
+    } catch (err) {
+      if (resultSpan) {
+        resultSpan.style.color = 'crimson';
+        resultSpan.textContent = '刪除失敗：' + (err.message || err);
+      }
+      console.error(err);
+    } finally {
+      if (deleteBtn) deleteBtn.disabled = false;
+      if (resultSpan) setTimeout(() => { if (resultSpan) resultSpan.textContent = '' }, 4000);
+    }
+  }
+
   function setupSubmitHandlers() {
     // attach to whatever controls currently exist
     const submitBtn = document.getElementById('submitBtn');
@@ -300,6 +374,11 @@
     if (saveBtn) {
       saveBtn.removeEventListener('click', saveMetadata);
       saveBtn.addEventListener('click', saveMetadata);
+    }
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn) {
+      deleteBtn.removeEventListener('click', deleteRecord);
+      deleteBtn.addEventListener('click', deleteRecord);
     }
   }
 
@@ -508,6 +587,7 @@
   }
 
   window.saveMetadata = saveMetadata;
+  window.deleteRecord = deleteRecord;
   window.setupSubmitHandlers = setupSubmitHandlers;
 
 })();

@@ -178,8 +178,17 @@ function clearAll() {
 
     localStorage.removeItem("guideData");
     sessionStorage.removeItem("currentBookEntryId");
+    
+    // Clear submit result message
+    const resultSpan = document.getElementById('submitResult');
+    if (resultSpan) resultSpan.textContent = '';
 }
 
+function goHome() {
+  clearAll();
+  // Reload the page to get a fresh form
+  window.location.href = 'index.html';
+}
 
 function renderControlsForUser(user) {
   const controls = document.getElementById('controls');
@@ -188,33 +197,62 @@ function renderControlsForUser(user) {
   // decide which set of buttons to show based on roles
   const roles = (user.roles || []).map(r => r.name);
   let html = '';
+  
+  // Check if we're in approval workflow (loading from list.html)
+  const inApprovalWorkflow = !!sessionStorage.getItem('currentBookEntryId');
 
-  if (roles.includes('inputter')) {
-    html = `
-      <button id="clearBtn" onclick="if(confirm('確定要清空所有已填寫的資料嗎？此動作無法復原')) clearAll();">清空</button>
-      <button id="submitBtn">送審核</button>
-      <button id="saveBtn">儲存</button>
-      <span id="submitResult"></span>
-    `;
-  } else if (roles.includes('reviewer')) {
-    html = `
-      <button id="submitBtn">送結案</button>
-      <button id="returnBtn">退回</button>
-      <span id="submitResult"></span>
-    `;
-  } else if (roles.includes('approver')) {
-    html = `
-      <button id="submitBtn">結案</button>
-      <button id="returnBtn">退回</button>
-      <span id="submitResult"></span>
-    `;
+  if (inApprovalWorkflow) {
+    // In approval workflow - show role-specific approval buttons with rejection
+    if (roles.includes('reviewer')) {
+      html = `
+        <button id="submitBtn">送結案</button>
+        <button id="returnBtn">退回</button>
+        <span id="submitResult"></span>
+      `;
+    } else if (roles.includes('approver')) {
+      html = `
+        <button id="submitBtn">結案</button>
+        <button id="returnBtn">退回</button>
+        <span id="submitResult"></span>
+      `;
+    } else if (roles.includes('inputter')) {
+      html = `
+        <button id="saveBtn">儲存</button>
+        <button id="submitBtn">送審核</button>
+        <span id="submitResult"></span>
+      `;
+      
+      // Check if this record can be deleted (status='editing', added_by=current user, not in book_approvals)
+      checkAndShowDeleteButton(user);
+    }
   } else {
-    // default to basic submit behavior
-    html = `
-      <button id="clearBtn" onclick="if(confirm('確定要清空所有已填寫的資料嗎？此動作無法復原')) clearAll();">清空</button>
-      <button id="submitBtn">送出</button>
-      <span id="submitResult"></span>
-    `;
+    // Not in approval workflow - new form (not yet in approval process)
+    if (roles.includes('inputter')) {
+      html = `
+        <button id="saveBtn">儲存</button>
+        <button id="submitBtn">送審核</button>
+        <span id="submitResult"></span>
+      `;
+    } else if (roles.includes('reviewer')) {
+      html = `
+        <button id="saveBtn">儲存</button>
+        <button id="submitBtn">送結案</button>
+        <span id="submitResult"></span>
+      `;
+    } else if (roles.includes('approver')) {
+      html = `
+        <button id="saveBtn">儲存</button>
+        <button id="submitBtn">結案</button>
+        <span id="submitResult"></span>
+      `;
+    } else {
+      // default to basic submit behavior
+      html = `
+        <button id="saveBtn">儲存</button>
+        <button id="submitBtn">送出</button>
+        <span id="submitResult"></span>
+      `;
+    }
   }
 
   controls.innerHTML = html;
@@ -225,8 +263,65 @@ function renderControlsForUser(user) {
   }
 }
 
-function initApp() {
+async function checkAndShowDeleteButton(user) {
+  try {
+    const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
+    if (!bookEntryId) return;
+
+    // Check if record exists in book_approvals
+    const { data: approvalData, error: approvalError } = await window.supabaseClient
+      .from('book_approvals')
+      .select('id')
+      .eq('book_entry_id', bookEntryId)
+      .limit(1);
+
+    if (approvalError) throw approvalError;
+
+    // If already in book_approvals, don't show delete button
+    if (approvalData && approvalData.length > 0) return;
+
+    // Check book_entry status and added_by
+    const { data: entryData, error: entryError } = await window.supabaseClient
+      .from('book_entries')
+      .select('status_code, added_by')
+      .eq('id', bookEntryId)
+      .single();
+
+    if (entryError) throw entryError;
+
+    // Only show delete button if status='editing' and added_by=current user
+    if (entryData && entryData.status_code === 'editing' && entryData.added_by === user.id) {
+      // Add delete button to controls
+      const controls = document.getElementById('controls');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.id = 'deleteBtn';
+      deleteBtn.textContent = '刪除';
+      deleteBtn.onclick = () => {
+        if (confirm('確定要刪除此記錄嗎？此動作無法復原')) {
+          if (typeof window.deleteRecord === 'function') {
+            window.deleteRecord();
+          }
+        }
+      };
+      controls.appendChild(deleteBtn);
+    }
+  } catch (err) {
+    console.error('Error checking delete button condition:', err);
+  }
+}
+
+function initApp(skipClear = false) {
   loadColumns();
+  
+  // Clear form unless we're loading from list.html (indicated by guideData in localStorage)
+  if (!skipClear) {
+    const stored = localStorage.getItem('guideData');
+    if (!stored) {
+      // No guideData means this is a new form, not loading from list
+      clearAll();
+    }
+  }
+  
   // render controls once columns are loaded and user available
   const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
   if (user) renderControlsForUser(user);
