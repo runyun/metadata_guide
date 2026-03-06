@@ -123,6 +123,8 @@ function fillFromLocalStorage() {
   for (const key in stored) {
     if (key === 'volumes') {
       const list = document.getElementById(key + "List");
+      if (!list) continue;
+      
       const values = stored[key].value ? stored[key].value.split('&') : [];
       const containers = list.querySelectorAll('.volume-input-container');
       
@@ -175,6 +177,7 @@ function clearAll() {
     }
 
     localStorage.removeItem("guideData");
+    sessionStorage.removeItem("currentBookEntryId");
 }
 
 

@@ -1,4 +1,4 @@
-// Fetch and render entries from `metadata` table (data jsonb)
+// Fetch and render entries from `metadata` table with book_entries status
 (async function () {
   function fmtDate(ts) {
     try {
@@ -10,7 +10,43 @@
     } catch (e) {
       return ts;
     }
+  }
 
+  // Convert metadata data to guideData format for loading into form
+  function dataToGuideData(metaData) {
+    const guideData = {};
+    
+    for (const col of data.columns) {
+      const value = metaData[col.name] || '';
+      const pageValue = metaData[col.name + '_page'] || '';
+      
+      guideData[col.name] = {
+        value: value,
+        page: pageValue
+      };
+    }
+    return guideData;
+  }
+
+  // Open record in index.html
+  function openRecord(metaId, bookEntryId, metaData) {
+    // Save metadata to localStorage as guideData
+    const guideData = dataToGuideData(metaData);
+    try {
+      localStorage.setItem('guideData', JSON.stringify(guideData));
+    } catch (e) {
+      console.error('Unable to save to localStorage:', e);
+    }
+
+    // Save book_entry_id to sessionStorage for reviewer/approver operations
+    try {
+      sessionStorage.setItem('currentBookEntryId', bookEntryId);
+    } catch (e) {
+      console.error('Unable to save to sessionStorage:', e);
+    }
+
+    // Open index.html in same window
+    window.location.href = 'index.html?metaId=' + metaId;
   }
 
   async function loadList() {
@@ -26,9 +62,10 @@
     container.textContent = '載入中…';
 
     try {
+      // Fetch metadata with associated book_entries
       const { data: rows, error } = await window.supabaseClient
         .from('metadata')
-        .select('id, data')
+        .select('id, data, book_entries(id, status_code, added_at)')
         .order('id', { ascending: false })
         .limit(200);
 
@@ -42,10 +79,11 @@
       const table = document.createElement('table');
       table.className = 'metadataTable';
 
-      // Header
+      // Header: Action | Status | ID | Created | ...columns
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
-      headerRow.innerHTML = '<th>編號</th><th>建立時間</th>' + data.columns.map(col => `<th>${col.display}</th>`).join('');
+      headerRow.innerHTML = '<th>操作</th><th>狀態</th><th>編號</th><th>建立時間</th>' + 
+                            data.columns.map(col => `<th>${col.display}</th>`).join('');
       thead.appendChild(headerRow);
       table.appendChild(thead);
 
@@ -53,8 +91,70 @@
       const tbody = document.createElement('tbody');
       for (const row of rows) {
         const tr = document.createElement('tr');
-        const created = fmtDate(row.created_at);
-        tr.innerHTML = `<td>${row.id}</td><td>${created}</td>` + data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
+        
+        // Get book entry info
+        let bookEntryId = null;
+        let statusCode = '編輯中'; // default status
+        let statusDisplay = '編輯中';
+        let created = ''; // default empty
+        
+        if (row.book_entries && row.book_entries.length > 0) {
+          const entry = row.book_entries[0];
+          bookEntryId = entry.id;
+          statusCode = entry.status_code;
+          created = fmtDate(entry.added_at);
+          
+          // Map status code to display name
+          const statusMap = {
+            'editing': '編輯中',
+            'reviewing': '審核中',
+            'closing': '待結案',
+            'closed': '已結案'
+          };
+          statusDisplay = statusMap[statusCode] || statusCode;
+        }
+
+        // Create action button
+        const actionBtn = document.createElement('button');
+        actionBtn.type = 'button';
+        actionBtn.textContent = '打開';
+        actionBtn.style.cursor = 'pointer';
+
+        actionBtn.addEventListener('click', (e) => {
+          openRecord(row.id, bookEntryId, row.data);
+        });
+
+        const actionCell = document.createElement('td');
+        actionCell.appendChild(actionBtn);
+
+        // Status cell
+        const statusCell = document.createElement('td');
+        statusCell.textContent = statusDisplay;
+
+        // Build rest of row
+        const restHtml = `<td>${row.id}</td><td>${created}</td>` + 
+                         data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
+
+        tr.appendChild(actionCell);
+        tr.appendChild(statusCell);
+        
+        // ID
+        const idCell = document.createElement('td');
+        idCell.textContent = row.id;
+        tr.appendChild(idCell);
+
+        // created
+        const createdCell = document.createElement('td');
+        createdCell.textContent = created;
+        tr.appendChild(createdCell);
+
+        // columns
+        for (const col of data.columns) {
+          const td = document.createElement('td');
+          td.textContent = row.data[col.name] || '';
+          tr.appendChild(td);
+        }
+        
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);

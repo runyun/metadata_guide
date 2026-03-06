@@ -44,7 +44,7 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const btn = document.getElementById('viewMetadataBtn');
-                if (btn) btn.addEventListener('click', () => window.open('list.html', '_blank'));
+                if (btn) btn.onclick = () => location.href = 'list.html';
             });
         </script>
 
