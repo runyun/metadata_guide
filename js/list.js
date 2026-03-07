@@ -38,9 +38,10 @@
       console.error('Unable to save to localStorage:', e);
     }
 
-    // Save book_entry_id to sessionStorage for reviewer/approver operations
+    // Save ids to sessionStorage for later use
     try {
       sessionStorage.setItem('currentBookEntryId', bookEntryId);
+      sessionStorage.setItem('currentMetaId', metaId);
     } catch (e) {
       console.error('Unable to save to sessionStorage:', e);
     }

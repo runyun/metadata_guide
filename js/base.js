@@ -178,10 +178,25 @@ function clearAll() {
 
     localStorage.removeItem("guideData");
     sessionStorage.removeItem("currentBookEntryId");
+    sessionStorage.removeItem("currentMetaId");
     
+    updateFormTitle();
+
     // Clear submit result message
     const resultSpan = document.getElementById('submitResult');
     if (resultSpan) resultSpan.textContent = '';
+}
+
+function updateFormTitle() {
+  const titleEl = document.getElementById('formTitle');
+  if (!titleEl) return;
+
+  const metaId = sessionStorage.getItem('currentMetaId');
+  if (metaId) {
+    titleEl.textContent = `表單編號：${metaId}`;
+  } else {
+    titleEl.textContent = '新表單';
+  }
 }
 
 function goHome() {
@@ -311,7 +326,14 @@ async function checkAndShowDeleteButton(user) {
 }
 
 function initApp(skipClear = false) {
+  // If a metaId is passed via URL (e.g. from list.html), keep it in sessionStorage for title display.
+  const urlMetaId = new URLSearchParams(window.location.search).get('metaId');
+  if (urlMetaId) {
+    sessionStorage.setItem('currentMetaId', urlMetaId);
+  }
+
   loadColumns();
+  updateFormTitle();
   
   // Clear form unless we're loading from list.html (indicated by guideData in localStorage)
   if (!skipClear) {
@@ -341,4 +363,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.onUserLogout = function() {
     // currently nothing special to clear beyond UI
   };
+
 });

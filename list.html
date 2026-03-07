@@ -8,10 +8,18 @@
 </head>
 <body>
   <header>
-    <button onclick="location.href='index.html'">回主頁</button>
+    <button onclick="returnToIndexEmpty()">回主頁</button>
     <div>清單</div>
     <span></span>
   </header>
+  <script>
+    function returnToIndexEmpty() {
+      localStorage.removeItem('guideData');
+      sessionStorage.removeItem('currentBookEntryId');
+      sessionStorage.removeItem('currentMetaId');
+      window.location.href = 'index.html';
+    }
+  </script>
 
   <div id="listContainer">載入中…</div>
 
