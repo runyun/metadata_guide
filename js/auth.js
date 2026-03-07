@@ -46,6 +46,12 @@
     events.forEach((ev) => {
       document.removeEventListener(ev, resetInactivityTimer);
     });
+
+    // If there is no login UI on this page (e.g. list.html), redirect back to index
+    if (!document.getElementById('loginBox')) {
+      window.location.href = 'index.html';
+    }
+
     if (typeof window.onUserLogout === 'function') window.onUserLogout();
   }
 
@@ -77,25 +83,31 @@
     const userDisplay = document.getElementById('userDisplay');
     const header = document.getElementsByTagName('header')[0];
 
-    if (!loginBox || !appContent) return;
+    // Show/hide login UI if present (index page)
+    if (loginBox) {
+      if (user) {
+        loginBox.style.display = 'none';
+        if (appContent) appContent.style.display = '';
+        if (header) header.style.display = '';
+      } else {
+        loginBox.style.display = 'flex';
+        if (appContent) appContent.style.display = 'none';
+        if (header) header.style.display = 'none';
+      }
+    }
 
-    if (user) {
-      loginBox.style.display = 'none';
-      appContent.style.display = '';
-      header.style.display = '';
-      if (userDisplay) {
+    // Update user display if available (list page + index page)
+    if (userDisplay) {
+      if (user) {
         let text = '已登入：' + user.name;
         if (user.roles && user.roles.length) {
-          const roleNames = user.roles.map(r=>r.name || r.id);
+          const roleNames = user.roles.map(r => r.name || r.id);
           text += ' [' + roleNames.join(', ') + ']';
         }
         userDisplay.textContent = text;
+      } else {
+        userDisplay.textContent = '';
       }
-    } else {
-      loginBox.style.display = 'flex';
-      appContent.style.display = 'none';
-      header.style.display = 'none';
-      if (userDisplay) userDisplay.textContent = '';
     }
   }
 
