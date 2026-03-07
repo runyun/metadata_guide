@@ -66,7 +66,7 @@
       // Fetch metadata with associated book_entries
       const { data: rows, error } = await window.supabaseClient
         .from('metadata')
-        .select('id, data, book_entries(id, status_code, added_at)')
+        .select('id, data, book_entries(id, status_code, added_at, added_by)')
         .order('id', { ascending: false })
         .limit(200);
 
@@ -80,13 +80,37 @@
       const table = document.createElement('table');
       table.className = 'metadataTable';
 
-      // Header: Action | Status | ID | Created | ...columns
+      // Header: Action | Status | ID | Created | Creator | ...columns
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
-      headerRow.innerHTML = '<th>操作</th><th>狀態</th><th>編號</th><th>建立時間</th>' + 
+      headerRow.innerHTML = '<th>操作</th><th>狀態</th><th>編號</th><th>建立時間</th><th>建立者</th>' + 
                             data.columns.map(col => `<th>${col.display}</th>`).join('');
       thead.appendChild(headerRow);
       table.appendChild(thead);
+
+      // Fetch creator names for book_entries
+      const creatorIds = new Set();
+      for (const row of rows) {
+        if (row.book_entries && row.book_entries.length > 0) {
+          const entry = row.book_entries[0];
+          if (entry.added_by) {
+            creatorIds.add(entry.added_by);
+          }
+        }
+      }
+
+      const creatorMap = {};
+      if (creatorIds.size > 0) {
+        const { data: users, error: usersError } = await window.supabaseClient
+          .from('users')
+          .select('id, name')
+          .in('id', Array.from(creatorIds));
+        if (!usersError && users && users.length) {
+          users.forEach(u => {
+            creatorMap[u.id] = u.name;
+          });
+        }
+      }
 
       // Body
       const tbody = document.createElement('tbody');
@@ -98,12 +122,14 @@
         let statusCode = '編輯中'; // default status
         let statusDisplay = '編輯中';
         let created = ''; // default empty
+        let creatorName = '';
         
         if (row.book_entries && row.book_entries.length > 0) {
           const entry = row.book_entries[0];
           bookEntryId = entry.id;
           statusCode = entry.status_code;
           created = fmtDate(entry.added_at);
+          creatorName = creatorMap[entry.added_by] || '';
           
           // Map status code to display name
           const statusMap = {
@@ -132,22 +158,23 @@
         const statusCell = document.createElement('td');
         statusCell.textContent = statusDisplay;
 
-        // Build rest of row
-        const restHtml = `<td>${row.id}</td><td>${created}</td>` + 
-                         data.columns.map(col => `<td>${row.data[col.name] || ''}</td>`).join('');
-
-        tr.appendChild(actionCell);
-        tr.appendChild(statusCell);
-        
         // ID
         const idCell = document.createElement('td');
         idCell.textContent = row.id;
-        tr.appendChild(idCell);
 
         // created
         const createdCell = document.createElement('td');
         createdCell.textContent = created;
+
+        // creator
+        const creatorCell = document.createElement('td');
+        creatorCell.textContent = creatorName;
+
+        tr.appendChild(actionCell);
+        tr.appendChild(statusCell);
+        tr.appendChild(idCell);
         tr.appendChild(createdCell);
+        tr.appendChild(creatorCell);
 
         // columns
         for (const col of data.columns) {

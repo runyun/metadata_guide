@@ -176,15 +176,25 @@ function clearAll() {
       }
     }
 
-    localStorage.removeItem("guideData");
-    sessionStorage.removeItem("currentBookEntryId");
-    sessionStorage.removeItem("currentMetaId");
-    
+    clearStoredFormState();
     updateFormTitle();
 
     // Clear submit result message
     const resultSpan = document.getElementById('submitResult');
     if (resultSpan) resultSpan.textContent = '';
+}
+
+function clearStoredFormState() {
+  localStorage.removeItem('guideData');
+  sessionStorage.removeItem('currentBookEntryId');
+  sessionStorage.removeItem('currentMetaId');
+
+  // Remove metaId from URL to prevent reload from reusing it
+  const url = new URL(window.location.href);
+  if (url.searchParams.has('metaId')) {
+    url.searchParams.delete('metaId');
+    window.history.replaceState(null, '', url.toString());
+  }
 }
 
 function updateFormTitle() {
@@ -248,6 +258,7 @@ function renderControlsForUser(user) {
         <button id="submitBtn">送審核</button>
         <span id="submitResult"></span>
       `;
+      checkAndShowDeleteButton(user);
     } else if (roles.includes('reviewer')) {
       html = `
         <button id="saveBtn">儲存</button>
@@ -326,15 +337,21 @@ async function checkAndShowDeleteButton(user) {
 }
 
 function initApp(skipClear = false) {
-  // If a metaId is passed via URL (e.g. from list.html), keep it in sessionStorage for title display.
   const urlMetaId = new URLSearchParams(window.location.search).get('metaId');
-  if (urlMetaId) {
+  const isLoadingFromList = !!urlMetaId;
+
+  // When opening from list.html, keep the metadata (from localStorage) for this one load.
+  // But clear it immediately afterward so reload/login always starts fresh.
+  if (isLoadingFromList) {
     sessionStorage.setItem('currentMetaId', urlMetaId);
+  } else {
+    // On normal load/refresh/login, always start with an empty form.
+    clearStoredFormState();
   }
 
   loadColumns();
   updateFormTitle();
-  
+
   // Clear form unless we're loading from list.html (indicated by guideData in localStorage)
   if (!skipClear) {
     const stored = localStorage.getItem('guideData');
@@ -343,7 +360,12 @@ function initApp(skipClear = false) {
       clearAll();
     }
   }
-  
+
+  // If we came from list.html, clear the persisted state immediately after rendering.
+  if (isLoadingFromList) {
+    clearStoredFormState();
+  }
+
   // render controls once columns are loaded and user available
   const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
   if (user) renderControlsForUser(user);
