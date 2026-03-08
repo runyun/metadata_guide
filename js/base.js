@@ -239,6 +239,7 @@ async function renderControlsForUser(user) {
   // This should be based on whether a book_approvals entry exists for this book_entry.
   const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
   let inApprovalWorkflow = false;
+  let statusCode = null;
   if (bookEntryId) {
     try {
       const { data: approvalData, error: approvalError } = await window.supabaseClient
@@ -249,12 +250,32 @@ async function renderControlsForUser(user) {
       if (!approvalError && approvalData && approvalData.length > 0) {
         inApprovalWorkflow = true;
       }
+
+      // Also fetch status_code
+      const { data: entryData, error: entryError } = await window.supabaseClient
+        .from('book_entries')
+        .select('status_code')
+        .eq('id', bookEntryId)
+        .single();
+      if (!entryError && entryData) {
+        statusCode = entryData.status_code;
+      }
     } catch (err) {
-      console.error('Error checking approval workflow status:', err);
+      console.error('Error checking approval workflow or status:', err);
     }
   }
-
-  if (inApprovalWorkflow) {
+  
+  let formEditable = false;
+  if(statusCode =='closed' 
+    || (statusCode == 'reviewing' && roles.includes('inputter'))
+    || (statusCode == 'closing' && (roles.includes('inputter') || roles.includes('reviewer')))) {
+      formEditable = true;
+    }
+  if (inApprovalWorkflow && formEditable) {
+    // Closed records in approval workflow: no buttons, read-only
+    html = '';
+    setFormEditable(false);
+  } else if (inApprovalWorkflow) {
     // In approval workflow - show role-specific approval buttons with rejection
     if (roles.includes('reviewer')) {
       html = `
@@ -275,6 +296,7 @@ async function renderControlsForUser(user) {
         <span id="submitResult"></span>
       `;
     }
+    setFormEditable(true);
   } else {
     // Not in approval workflow - new form (not yet in approval process)
     if (roles.includes('inputter')) {
@@ -303,6 +325,14 @@ async function renderControlsForUser(user) {
         <span id="submitResult"></span>
       `;
     }
+
+    // Check if this record can be deleted (status='editing', added_by=current user, not in book_approvals)
+    // This may add an extra '刪除' button, but should not remove other controls.
+    await checkAndShowDeleteButton(user);
+
+    // When no buttons are shown in the controls area, lock inputs so user cannot edit.
+    const hasControlButtons = controls.querySelectorAll('button').length > 0;
+    setFormEditable(hasControlButtons);
   }
 
   controls.innerHTML = html;
@@ -311,15 +341,8 @@ async function renderControlsForUser(user) {
   if (typeof window.setupSubmitHandlers === 'function') {
     window.setupSubmitHandlers();
   }
-
-  // Check if this record can be deleted (status='editing', added_by=current user, not in book_approvals)
-  // This may add an extra '刪除' button, but should not remove other controls.
-  await checkAndShowDeleteButton(user);
-
-  // When no buttons are shown in the controls area, lock inputs so user cannot edit.
-  const hasControlButtons = controls.querySelectorAll('button').length > 0;
-  setFormEditable(hasControlButtons);
 }
+
 
 async function checkAndShowDeleteButton(user) {
   try {
