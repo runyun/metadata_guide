@@ -375,3 +375,11 @@ button:hover {
 .volume-input-container button:hover {
   background-color: #c82333;
 }
+
+#rejectComment{
+  padding : 10px;
+  margin-bottom : 10px;
+  border : 1px solid #d33;
+  background : #ffe6e6;
+  color : #600;
+}

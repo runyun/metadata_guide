@@ -227,6 +227,41 @@ function goHome() {
   window.location.href = 'index.html';
 }
 
+async function renderRejectComment(bookEntryId) {
+  const controls = document.getElementById('controls');
+  if (!controls) return;
+
+  const existing = document.getElementById('rejectComment');
+  try {
+    const { data, error } = await window.supabaseClient
+      .from('book_approvals')
+      .select('comment')
+      .eq('book_entry_id', bookEntryId)
+      .eq('action', 'reject')
+      .order('acted_at', { ascending: false })
+      .limit(1);
+
+    if (error) throw error;
+    const comment = (data && data[0] && data[0].comment) ? data[0].comment : '';
+
+    if (!comment) {
+      if (existing) existing.remove();
+      return;
+    }
+
+    const div = existing || document.createElement('div');
+    div.id = 'rejectComment';
+    div.textContent = `退回 - ${comment}`;
+
+    if (!existing && controls.parentNode) {
+      controls.parentNode.insertBefore(div, controls);
+    }
+  } catch (err) {
+    console.error('Error fetching reject comment:', err);
+    if (existing) existing.remove();
+  }
+}
+
 async function renderControlsForUser(user) {
   const controls = document.getElementById('controls');
   if (!controls) return;
@@ -260,6 +295,9 @@ async function renderControlsForUser(user) {
       if (!entryError && entryData) {
         statusCode = entryData.status_code;
       }
+
+      // If record was loaded from list (has bookEntryId), show reject comment if any
+      await renderRejectComment(bookEntryId);
     } catch (err) {
       console.error('Error checking approval workflow or status:', err);
     }
