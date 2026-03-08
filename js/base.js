@@ -235,14 +235,13 @@ async function renderRejectComment(bookEntryId) {
   try {
     const { data, error } = await window.supabaseClient
       .from('book_approvals')
-      .select('comment')
+      .select('action, comment')
       .eq('book_entry_id', bookEntryId)
-      .eq('action', 'reject')
       .order('acted_at', { ascending: false })
       .limit(1);
 
     if (error) throw error;
-    const comment = (data && data[0] && data[0].comment) ? data[0].comment : '';
+    const comment = (data && data[0] && data[0].action == 'reject' && data[0].comment) ? data[0].comment : '';
 
     if (!comment) {
       if (existing) existing.remove();

@@ -33,6 +33,32 @@
     return data;
   }
 
+  async function reloadCurrentRecord() {
+    let metaId = sessionStorage.getItem('currentMetaId') || new URLSearchParams(window.location.search).get('metaId');
+    if (!metaId) {
+      const bookEntryId = sessionStorage.getItem('currentBookEntryId');
+      if (bookEntryId) {
+        try {
+          const { data, error } = await window.supabaseClient
+            .from('book_entries')
+            .select('book_id')
+            .eq('id', bookEntryId)
+            .single();
+          if (!error && data && data.book_id) {
+            metaId = data.book_id;
+            sessionStorage.setItem('currentMetaId', metaId);
+          }
+        } catch (e) {
+          console.error('Unable to resolve metaId from bookEntryId:', e);
+        }
+      }
+    }
+
+    if (!metaId) return;
+    // Force reload with metaId param to behave like opened from list
+    window.location.href = 'index.html?metaId=' + metaId;
+  }
+
   async function submitMetadata() {
     const titleInput = document.getElementById('titleResult');
     if (!titleInput) return alert('找不到「譜名」欄位');
@@ -171,8 +197,10 @@
     resultSpan.style.color = 'green';
     resultSpan.textContent = '已成功送出審核，等待審核者審查';
 
-    // clear inputs after successful submit
-    if (typeof clearAll === 'function') clearAll();
+    // keep current record context and reload like from list
+    sessionStorage.setItem('currentMetaId', metaId);
+    sessionStorage.setItem('currentBookEntryId', entryId);
+    reloadCurrentRecord();
   }
 
   async function submitToApprover(user, resultSpan) {
@@ -226,8 +254,9 @@
     resultSpan.style.color = 'green';
     resultSpan.textContent = '已送出結案，等待批准者確認';
 
-    // Clear the session storage entry
-    sessionStorage.removeItem('currentBookEntryId');
+    // Keep current context and reload as if opened from list
+    sessionStorage.setItem('currentBookEntryId', bookEntryId);
+    reloadCurrentRecord();
   }
 
   async function closureApproval(user, resultSpan) {
@@ -280,8 +309,9 @@
     resultSpan.style.color = 'green';
     resultSpan.textContent = '已結案，記錄已完成';
 
-    // Clear the session storage entry
-    sessionStorage.removeItem('currentBookEntryId');
+    // Keep current context and reload as if opened from list
+    sessionStorage.setItem('currentBookEntryId', bookEntryId);
+    reloadCurrentRecord();
   }
 
   async function deleteRecord() {
@@ -483,8 +513,9 @@
         resultSpan.textContent = '已退回上一個步驟';
       }
 
-      // Clear the session storage entry
-      sessionStorage.removeItem('currentBookEntryId');
+      // Keep current context and reload as if opened from list
+      sessionStorage.setItem('currentBookEntryId', bookEntryId);
+      reloadCurrentRecord();
     } catch (err) {
       if (resultSpan) {
         resultSpan.style.color = 'crimson';
