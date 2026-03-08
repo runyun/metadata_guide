@@ -119,49 +119,88 @@
   }
 
   async function submitForApproval(user, payload, resultSpan) {
-    // Step 1: Insert metadata
-    const {
-      data: metaRows,
-      error: metaErr
-    } = await window.supabaseClient
-      .from('metadata')
-      .insert([{ data: payload }])
-      .select();
+    // Determine if we're updating existing metadata (editing) or creating new.
+    let metaId = sessionStorage.getItem('currentMetaId') || new URLSearchParams(window.location.search).get('metaId');
+    const rawBookEntryId = sessionStorage.getItem('currentBookEntryId') || new URLSearchParams(window.location.search).get('entryId');
+    let bookEntryId = (rawBookEntryId && rawBookEntryId !== 'null' && rawBookEntryId !== 'undefined') ? rawBookEntryId : null;
 
-    if (metaErr) throw metaErr;
-    const metaId = metaRows && metaRows[0] && metaRows[0].id;
-    if (!metaId) throw new Error('無法取得 metadata id');
-
-    // Step 2: Create book_entries record
-    const entryObj = {
-      added_by: user.id,
-      book_id: metaId,
-      status_code: 'reviewing', // Status indicating submitted for review
-      current_role_id: null // Will be set by reviewer
-    };
-
-    // attach organization/location if available from user affiliations
-    if (user.affiliations && user.affiliations.length > 0) {
-      const aff = user.affiliations[0];
-      if (aff.organization && aff.organization.id) {
-        entryObj.organization_id = aff.organization.id;
-      }
-      if (aff.location && aff.location.id) {
-        entryObj.location_id = aff.location.id;
+    // If we know the bookEntryId but not metaId, resolve the metaId from book_entries
+    if (!metaId && bookEntryId) {
+      try {
+        const { data: entryData, error: entryErr } = await window.supabaseClient
+          .from('book_entries')
+          .select('book_id')
+          .eq('id', bookEntryId)
+          .single();
+        if (!entryErr && entryData && entryData.book_id) {
+          metaId = entryData.book_id;
+          sessionStorage.setItem('currentMetaId', metaId);
+        }
+      } catch (e) {
+        console.error('Unable to resolve metaId from bookEntryId:', e);
       }
     }
 
-    const {
-      data: entryRows,
-      error: entryErr
-    } = await window.supabaseClient
-      .from('book_entries')
-      .insert([entryObj])
-      .select();
+    // If we have an existing metadata record, just update it (no insert)
+    if (metaId) {
+      const { error: updateErr } = await window.supabaseClient
+        .from('metadata')
+        .update({ data: payload })
+        .eq('id', metaId);
+      if (updateErr) throw updateErr;
+    } else {
+      // Create new metadata record
+      const {
+        data: metaRows,
+        error: metaErr
+      } = await window.supabaseClient
+        .from('metadata')
+        .insert([{ data: payload }])
+        .select();
 
-    if (entryErr) throw entryErr;
-    const entryId = entryRows && entryRows[0] && entryRows[0].id;
-    if (!entryId) throw new Error('無法取得 book_entries id');
+      if (metaErr) throw metaErr;
+      metaId = metaRows && metaRows[0] && metaRows[0].id;
+      if (!metaId) throw new Error('無法取得 metadata id');
+    }
+
+    // Ensure we have a book_entries record for this metadata.
+    // If bookEntryId is not provided, create a new one.
+    if (!bookEntryId) {
+      // Create book_entries record
+      const entryObj = {
+        added_by: user.id,
+        book_id: metaId,
+        status_code: 'reviewing', // Status indicating submitted for review
+        current_role_id: null // Will be set by reviewer
+      };
+
+      // attach organization/location if available from user affiliations
+      if (user.affiliations && user.affiliations.length > 0) {
+        const aff = user.affiliations[0];
+        if (aff.organization && aff.organization.id) {
+          entryObj.organization_id = aff.organization.id;
+        }
+        if (aff.location && aff.location.id) {
+          entryObj.location_id = aff.location.id;
+        }
+      }
+
+      const {
+        data: entryRows,
+        error: entryErr
+      } = await window.supabaseClient
+        .from('book_entries')
+        .insert([entryObj])
+        .select();
+
+      if (entryErr) throw entryErr;
+      bookEntryId = entryRows && entryRows[0] && entryRows[0].id;
+      if (!bookEntryId) throw new Error('無法取得 book_entries id');
+    }
+
+    // Ensure current ids are stored for later reload
+    sessionStorage.setItem('currentMetaId', metaId);
+    sessionStorage.setItem('currentBookEntryId', bookEntryId);
 
     // Step 3: Get inputter role_id to record in book_approvals
     const inputterRole = user.roles && user.roles.find(r => r.name === 'inputter');
@@ -175,7 +214,7 @@
     } = await window.supabaseClient
       .from('book_approvals')
       .insert([{
-        book_entry_id: entryId,
+        book_entry_id: bookEntryId,
         role_id: inputterRole.id,
         approved_by: user.id,
         action: 'approve', // Inputter approves their own input before submission
@@ -199,7 +238,7 @@
 
     // keep current record context and reload like from list
     sessionStorage.setItem('currentMetaId', metaId);
-    sessionStorage.setItem('currentBookEntryId', entryId);
+    sessionStorage.setItem('currentBookEntryId', bookEntryId);
     reloadCurrentRecord();
   }
 

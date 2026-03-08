@@ -271,7 +271,29 @@ async function renderControlsForUser(user) {
 
   // Determine whether this record is already in the approval workflow.
   // This should be based on whether a book_approvals entry exists for this book_entry.
-  const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
+  let bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
+
+  // If we don't have bookEntryId stored yet but have a metaId in context, try to resolve it.
+  if (!bookEntryId) {
+    const metaId = sessionStorage.getItem('currentMetaId') || new URLSearchParams(window.location.search).get('metaId');
+    if (metaId) {
+      try {
+        const { data: entries, error: entryErr } = await window.supabaseClient
+          .from('book_entries')
+          .select('id')
+          .eq('book_id', metaId)
+          .order('added_at', { ascending: false })
+          .limit(1);
+        if (!entryErr && entries && entries.length > 0) {
+          bookEntryId = entries[0].id;
+          sessionStorage.setItem('currentBookEntryId', bookEntryId);
+        }
+      } catch (err) {
+        console.error('Error resolving bookEntryId from metaId:', err);
+      }
+    }
+  }
+
   let inApprovalWorkflow = false;
   let statusCode = null;
   if (bookEntryId) {
@@ -445,9 +467,9 @@ function initApp(skipClear = false) {
     }
   }
 
-  // If we came from list.html, clear the persisted state immediately after rendering.
+  // If we came from list.html, clear the persisted guideData state (not the ids)
   if (isLoadingFromList) {
-    clearStoredFormState();
+    localStorage.removeItem('guideData');
   }
 
   // render controls once columns are loaded and user available

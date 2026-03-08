@@ -39,8 +39,13 @@
     }
 
     // Save ids to sessionStorage for later use
+    // Note: bookEntryId can be null (no book_entries yet), so avoid storing the string "null".
     try {
-      sessionStorage.setItem('currentBookEntryId', bookEntryId);
+      if (bookEntryId && !['null', 'undefined'].includes(String(bookEntryId))) {
+        sessionStorage.setItem('currentBookEntryId', bookEntryId);
+      } else {
+        sessionStorage.removeItem('currentBookEntryId');
+      }
       sessionStorage.setItem('currentMetaId', metaId);
     } catch (e) {
       console.error('Unable to save to sessionStorage:', e);
