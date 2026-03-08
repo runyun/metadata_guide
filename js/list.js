@@ -128,10 +128,10 @@
     const table = document.createElement('table');
     table.className = 'metadataTable';
 
-    // Header: Action | Status | ID | Created | Creator | ...columns
+    // Header: Action | Status | ID | Created | Creator | Organization | Location | ...columns
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    headerRow.innerHTML = '<th>操作</th><th>狀態</th><th>編號</th><th>建立時間</th><th>建立者</th>' + 
+    headerRow.innerHTML = '<th>操作</th><th>狀態</th><th>編號</th><th>建立時間</th><th>建立者</th><th>機構</th><th>地區</th>' + 
                           data.columns.map(col => `<th>${col.display}</th>`).join('');
     thead.appendChild(headerRow);
     table.appendChild(thead);
@@ -193,11 +193,21 @@
       const creatorCell = document.createElement('td');
       creatorCell.textContent = creatorName;
 
+      // organization
+      const orgCell = document.createElement('td');
+      orgCell.textContent = (row.book_entries && row.book_entries.length > 0) ? (row.book_entries[0].organizations?.name || row.book_entries[0].organization_id || '') : '';
+
+      // location
+      const locCell = document.createElement('td');
+      locCell.textContent = (row.book_entries && row.book_entries.length > 0) ? (row.book_entries[0].locations?.name || row.book_entries[0].location_id || '') : '';
+
       tr.appendChild(actionCell);
       tr.appendChild(statusCell);
       tr.appendChild(idCell);
       tr.appendChild(createdCell);
       tr.appendChild(creatorCell);
+      tr.appendChild(orgCell);
+      tr.appendChild(locCell);
 
       // columns
       for (const col of data.columns) {
