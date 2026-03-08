@@ -552,6 +552,59 @@
     try {
       const payload = await collectFormData();
 
+      // Determine whether we are editing an existing record
+      let metaId = sessionStorage.getItem('currentMetaId') || new URLSearchParams(window.location.search).get('metaId');
+      const bookEntryId = sessionStorage.getItem('currentBookEntryId') || new URLSearchParams(window.location.search).get('entryId');
+
+      // If we don't have metaId yet but have bookEntryId, resolve it
+      if (!metaId && bookEntryId) {
+        try {
+          const { data: entryData, error: entryErr } = await window.supabaseClient
+            .from('book_entries')
+            .select('book_id')
+            .eq('id', bookEntryId)
+            .single();
+          if (!entryErr && entryData && entryData.book_id) {
+            metaId = entryData.book_id;
+            sessionStorage.setItem('currentMetaId', metaId);
+          }
+        } catch (e) {
+          console.error('Unable to resolve metaId from bookEntryId:', e);
+        }
+      }
+
+      let isEditing = false;
+      if (bookEntryId) {
+        try {
+          const { data: entryData, error: entryErr } = await window.supabaseClient
+            .from('book_entries')
+            .select('status_code')
+            .eq('id', bookEntryId)
+            .single();
+          if (!entryErr && entryData && entryData.status_code === 'editing') {
+            isEditing = true;
+          }
+        } catch (e) {
+          console.error('Unable to verify editing status:', e);
+        }
+      }
+
+      // If we are editing an existing record, update metadata instead of inserting
+      if (isEditing && metaId) {
+        const { error: updateErr } = await window.supabaseClient
+          .from('metadata')
+          .update({ data: payload })
+          .eq('id', metaId);
+        if (updateErr) throw updateErr;
+
+        if (resultSpan) {
+          resultSpan.style.color = 'green';
+          resultSpan.textContent = '已成功更新表單（編輯狀態）';
+        }
+
+        return;
+      }
+
       // insert into metadata table first and grab its id
       const {
         data: metaRows,
@@ -562,13 +615,13 @@
         .select();
 
       if (metaErr) throw metaErr;
-      const metaId = metaRows && metaRows[0] && metaRows[0].id;
-      if (!metaId) throw new Error('無法取得 metadata id');
+      const newMetaId = metaRows && metaRows[0] && metaRows[0].id;
+      if (!newMetaId) throw new Error('無法取得 metadata id');
 
       // prepare book_entries record
       const entryObj = {
         added_by: user.id,
-        book_id: metaId
+        book_id: newMetaId
       };
 
       // attach organization/location if available from user affiliations
