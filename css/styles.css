@@ -62,6 +62,34 @@ header {
   width: 100px;
 }
 
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 20px;
+  background: #f1f1f1;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+}
+
+.filterBar label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filterBar input,
+.filterBar select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.filterBar button {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
 body.loading {
   opacity: 0.5;
   pointer-events: none; /* 使用者不能點擊 */

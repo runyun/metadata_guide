@@ -25,6 +25,34 @@
     }
   </script>
 
+  <div id="filterBar" class="filterBar">
+    <label>建立時間：</label>
+    <input type="date" id="filterFrom" />
+    <span>~</span>
+    <input type="date" id="filterTo" />
+
+    <label>狀態：</label>
+    <select id="filterStatus">
+      <option value="">全部</option>
+      <option value="editing">編輯中</option>
+      <option value="reviewing">審核中</option>
+      <option value="closing">待結案</option>
+      <option value="closed">已結案</option>
+    </select>
+
+    <label>機關：</label>
+    <input type="text" id="filterOrg" placeholder="機關名稱" />
+
+    <label>地區：</label>
+    <input type="text" id="filterLoc" placeholder="地區" />
+
+    <label>建立者：</label>
+    <input type="text" id="filterCreator" placeholder="建立者" />
+
+    <button id="applyFiltersBtn">套用</button>
+    <button id="clearFiltersBtn">清除</button>
+  </div>
+
   <div id="listContainer">載入中…</div>
 
   <script src="js/env.js"></script>
