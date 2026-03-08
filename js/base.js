@@ -158,6 +158,18 @@ function fillFromLocalStorage() {
   }
 }
 
+function setFormEditable(editable) {
+  const inputs = document.querySelectorAll('#metadataList input[type="text"]');
+  inputs.forEach(input => {
+    input.disabled = !editable;
+  });
+
+  const buttons = document.querySelectorAll('#metadataList button');
+  buttons.forEach(btn => {
+    btn.disabled = !editable;
+  });
+}
+
 function clearAll() {
     const inputs = document.querySelectorAll('#metadataList input[type="text"]');
     inputs.forEach(input => {
@@ -186,7 +198,7 @@ function clearAll() {
 
 function clearStoredFormState() {
   localStorage.removeItem('guideData');
-  sessionStorage.removeItem('currentBookEntryId');
+  // Keep currentBookEntryId so approval workflow (delete button, etc.) can still work.
   sessionStorage.removeItem('currentMetaId');
 
   // Remove metaId from URL to prevent reload from reusing it
@@ -215,16 +227,32 @@ function goHome() {
   window.location.href = 'index.html';
 }
 
-function renderControlsForUser(user) {
+async function renderControlsForUser(user) {
   const controls = document.getElementById('controls');
   if (!controls) return;
 
   // decide which set of buttons to show based on roles
   const roles = (user.roles || []).map(r => r.name);
   let html = '';
-  
-  // Check if we're in approval workflow (loading from list.html)
-  const inApprovalWorkflow = !!sessionStorage.getItem('currentBookEntryId');
+
+  // Determine whether this record is already in the approval workflow.
+  // This should be based on whether a book_approvals entry exists for this book_entry.
+  const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
+  let inApprovalWorkflow = false;
+  if (bookEntryId) {
+    try {
+      const { data: approvalData, error: approvalError } = await window.supabaseClient
+        .from('book_approvals')
+        .select('id')
+        .eq('book_entry_id', bookEntryId)
+        .limit(1);
+      if (!approvalError && approvalData && approvalData.length > 0) {
+        inApprovalWorkflow = true;
+      }
+    } catch (err) {
+      console.error('Error checking approval workflow status:', err);
+    }
+  }
 
   if (inApprovalWorkflow) {
     // In approval workflow - show role-specific approval buttons with rejection
@@ -246,9 +274,6 @@ function renderControlsForUser(user) {
         <button id="submitBtn">送審核</button>
         <span id="submitResult"></span>
       `;
-      
-      // Check if this record can be deleted (status='editing', added_by=current user, not in book_approvals)
-      checkAndShowDeleteButton(user);
     }
   } else {
     // Not in approval workflow - new form (not yet in approval process)
@@ -258,7 +283,6 @@ function renderControlsForUser(user) {
         <button id="submitBtn">送審核</button>
         <span id="submitResult"></span>
       `;
-      checkAndShowDeleteButton(user);
     } else if (roles.includes('reviewer')) {
       html = `
         <button id="saveBtn">儲存</button>
@@ -287,24 +311,20 @@ function renderControlsForUser(user) {
   if (typeof window.setupSubmitHandlers === 'function') {
     window.setupSubmitHandlers();
   }
+
+  // Check if this record can be deleted (status='editing', added_by=current user, not in book_approvals)
+  // This may add an extra '刪除' button, but should not remove other controls.
+  await checkAndShowDeleteButton(user);
+
+  // When no buttons are shown in the controls area, lock inputs so user cannot edit.
+  const hasControlButtons = controls.querySelectorAll('button').length > 0;
+  setFormEditable(hasControlButtons);
 }
 
 async function checkAndShowDeleteButton(user) {
   try {
     const bookEntryId = parseInt(sessionStorage.getItem('currentBookEntryId') || '0');
     if (!bookEntryId) return;
-
-    // Check if record exists in book_approvals
-    const { data: approvalData, error: approvalError } = await window.supabaseClient
-      .from('book_approvals')
-      .select('id')
-      .eq('book_entry_id', bookEntryId)
-      .limit(1);
-
-    if (approvalError) throw approvalError;
-
-    // If already in book_approvals, don't show delete button
-    if (approvalData && approvalData.length > 0) return;
 
     // Check book_entry status and added_by
     const { data: entryData, error: entryError } = await window.supabaseClient
@@ -330,6 +350,9 @@ async function checkAndShowDeleteButton(user) {
         }
       };
       controls.appendChild(deleteBtn);
+    
+    }else {
+      controls.innerHTML = '';
     }
   } catch (err) {
     console.error('Error checking delete button condition:', err);
@@ -340,13 +363,14 @@ function initApp(skipClear = false) {
   const urlMetaId = new URLSearchParams(window.location.search).get('metaId');
   const isLoadingFromList = !!urlMetaId;
 
-  // When opening from list.html, keep the metadata (from localStorage) for this one load.
-  // But clear it immediately afterward so reload/login always starts fresh.
+  // When opening from list.html, keep the metadata (and book_entry id) for this one load.
+  // But on refresh/normal load, clear the currentBookEntryId so that the form resets.
   if (isLoadingFromList) {
     sessionStorage.setItem('currentMetaId', urlMetaId);
   } else {
     // On normal load/refresh/login, always start with an empty form.
     clearStoredFormState();
+    sessionStorage.removeItem('currentBookEntryId');
   }
 
   loadColumns();
@@ -368,7 +392,10 @@ function initApp(skipClear = false) {
 
   // render controls once columns are loaded and user available
   const user = window.guideAuth && window.guideAuth.getCurrentUser && window.guideAuth.getCurrentUser();
-  if (user) renderControlsForUser(user);
+  if (user) {
+    // renderControlsForUser is async because it may check the approval table
+    renderControlsForUser(user).catch(err => console.error('Failed to render controls', err));
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
