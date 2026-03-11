@@ -15,17 +15,22 @@
     if (volumesList) {
       const volumeInputs = volumesList.querySelectorAll('input[type="text"]');
       const volumeValues = Array.from(volumeInputs).map(input => input.value || null).filter(val => val !== null && val.trim() !== '');
-      data.volumes = volumeValues.join('&');
+      if (volumeValues.length > 0) {
+        data.volumes = volumeValues.join('&');
+      }
     }
     
     // 處理其他輸入框
     inputs.forEach(input => {
       const key = input.id.replace(/Result\d*$/, '').replace(/Page$/, '');
       if (key && key !== 'volumes') {
-        if (input.id.endsWith('Page')) {
-          data[key + '_page'] = input.value || null;
-        } else {
-          data[key] = input.value || null;
+        const value = input.value || '';
+        if (value.trim() !== '') {
+          if (input.id.endsWith('Page')) {
+            data[key + '_page'] = value;
+          } else {
+            data[key] = value;
+          }
         }
       } 
     });
@@ -34,8 +39,8 @@
     const selects = document.querySelectorAll('#metadataList select');
     selects.forEach(select => {
       const key = select.id.replace(/Place$/, '');
-      if (key) {
-        data[key + '_place'] = select.value || null;
+      if (key && select.value) {
+        data[key + '_place'] = select.value;
       }
     });
     
