@@ -8,6 +8,22 @@ header {
   gap: 15px;
 }
 
+select {
+  height: 30px;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 10px;
+  border: 2px black solid;
+}
+
+.select-placeholder option:first-child {
+  color: gray;   
+}
+
+.select-placeholder option:not(:first-child) {
+  color: black;  
+}
+
 .header-logo {
   height: 40px;
   width: auto;
@@ -127,7 +143,7 @@ body.loading::after {
   padding: 10px;
   background: #eee;
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto 1fr;
   align-items: center;
 }
 
@@ -152,6 +168,10 @@ body.loading::after {
   border-radius: 5px;
   padding: 5px;
   margin-left: 10px;
+}
+
+.item input:nth-of-type(2) {
+  width: 5ch;
 }
 
 

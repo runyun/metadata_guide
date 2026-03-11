@@ -89,7 +89,11 @@ function loadColumns() {
     } else {
       inputHtml = `
         <input type="text" id="${col.name}Result" placeholder="請輸入${col.display}">
-        <input type="text" id="${col.name}Page" placeholder="資訊所在頁碼" >
+        <select id="${col.name}Place" class="select-placeholder">
+          <option value="">選取位置</option>
+          ${allPlaces.map(place => `<option value="${place}">${place}</option>`).join('')}
+        </select>
+        <input type="text" id="${col.name}Page" placeholder="頁碼" >
       `;
     }
 
