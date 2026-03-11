@@ -4,7 +4,7 @@
             "text": "版權頁有寫出版年嗎？",
             "warning": "通常在第1頁或最後1頁",
             "images": [
-                {"file": "publish_copyright.png"}
+                {"file": "publish_copyright.webp"}
             ],
             "answers": [
                 { "text": "有"},
@@ -14,7 +14,7 @@
         "2": { 
             "text": "書皮有寫出版年嗎？",
             "images": [
-                {"file": "publish_cover.png"}
+                {"file": "publish_cover.webp"}
             ],
             "answers": [
                 { "text": "有"},
@@ -24,7 +24,7 @@
         "3": { 
             "text": "書名頁有寫出版年嗎？",
             "images": [
-                {"file": "publish_1st_page.png", "description": "這例子的出版年是光緒元年，換算成西元年後填入「1875」"}
+                {"file": "publish_1st_page.webp", "description": "這例子的出版年是光緒元年，換算成西元年後填入「1875」"}
             ],
             "answers": [
                 { "text": "有"},
@@ -34,7 +34,7 @@
         "4": { 
             "text": "版心有寫出版年嗎？",
             "images": [
-                {"file": "publish_gutter.png", "description": "這例子的出版年是光緒33年，換算成西元年後填入「1907」"}
+                {"file": "publish_gutter.webp", "description": "這例子的出版年是光緒33年，換算成西元年後填入「1907」"}
             ],
             "answers": [
                 { "text": "有"},
@@ -51,7 +51,7 @@
         "6": { 
             "text": "最新的序(這次譜書寫好時寫的)有寫出版年嗎？",
             "images":[
-                {"file":"publish_preface.png"}
+                {"file":"publish_preface.webp"}
             ],
             "answers": [
                 { "text": "有"},
@@ -62,7 +62,7 @@
             "text": "書上有世傳的地方最後約5頁的後代有任何年份資訊嗎？",
             "warning": ["有的話請填離現在最近的年份"],
             "images": [
-                {"file": "publish_last_generation.png", "description": "這例子的最後幾頁裡離現代最近的是光緒乙酉，換算成西元年後填入「1885」"}
+                {"file": "publish_last_generation.webp", "description": "這例子的最後幾頁裡離現代最近的是光緒乙酉，換算成西元年後填入「1885」"}
             ],
             "answers": [
                 { "text": "有"},

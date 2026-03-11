@@ -11,9 +11,9 @@
             "text": "有沒有任何譜書的編輯單位？如:卷、冊、輯…等？",
             "warning": "可以找找書皮、版心、目錄有沒有這些資訊",
             "images": [
-                {"file": "total_number_cover_juan.png", "description": "書皮上有標示「卷」字"},
-                {"file": "total_number_gutter_contents.png", "description": "目錄或版心上有標示「卷」字"},
-                {"file": "total_number_contents_no_unit.png", "description": "沒有任何單位"}
+                {"file": "total_number_cover_juan.webp", "description": "書皮上有標示「卷」字"},
+                {"file": "total_number_gutter_contents.webp", "description": "目錄或版心上有標示「卷」字"},
+                {"file": "total_number_contents_no_unit.webp", "description": "沒有任何單位"}
             ],
             "answers": [
                 { "text": "有", "next": "3" },
@@ -32,8 +32,8 @@
             "text": "編輯單位有任何包含「卷」的部份嗎？",
             "warning": "有可能大單位不是「卷」，是別的單位，但是裡面有包含「卷」這個單位",
             "images": [
-                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
-                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
+                {"file": "total_number_contents_combine_2.webp", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
+                {"file": "total_number_contents_combine_3.webp", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
             ],
             "answers": [
                 { "text": "有" , "next": "6" },
@@ -51,7 +51,7 @@
             "text": "有卷首嗎？",
             "warning": "卷首和卷1不是一樣的",
             "images": [
-                {"file": "total_number_include_volumn_one.png"}
+                {"file": "total_number_include_volumn_one.webp"}
             ],
             "answers": [
                 { "text": "有", "next": "7" },
@@ -61,8 +61,8 @@
         "7": {
             "text": "卷首後有卷1還是直接卷2？",
             "images": [
-                {"file": "total_number_include_volumn_one.png", "description": "卷首後有卷1"},
-                {"file": "total_number_not_include_volumn_one.png", "description": "卷首後沒卷1，直接卷2"}
+                {"file": "total_number_include_volumn_one.webp", "description": "卷首後有卷1"},
+                {"file": "total_number_not_include_volumn_one.webp", "description": "卷首後沒卷1，直接卷2"}
             ],
             "answers": [
                 { "text": "有卷1", "next": "8"},
@@ -73,7 +73,7 @@
             "text": "填寫卷首數量的阿拉伯數字",
             "warning": "如果是類似「卷首上、下」的話那就算「2」個卷首",
             "images": [
-                {"file": "total_number_include_volumn_one.png", "description": "這例子只有1個卷首，填「1」"}
+                {"file": "total_number_include_volumn_one.webp", "description": "這例子只有1個卷首，填「1」"}
             ],
             "answers": [
                 { "text": "填寫", "save": "1",  "next": "10", "default": "首%卷" }
@@ -83,7 +83,7 @@
             "text": "填寫卷首數量的阿拉伯數字",
             "warning": "如果是類似「卷首上、下」的話那就算「2」個卷首",
             "images": [
-                {"file": "total_number_not_include_volumn_one.png", "description": "這例子只有1個卷首，填「1」"}
+                {"file": "total_number_not_include_volumn_one.webp", "description": "這例子只有1個卷首，填「1」"}
             ],
             "answers": [
                 { "text": "填寫", "save": "1", "next": "10", "default": "含首%卷" }
@@ -93,7 +93,7 @@
             "text": "有卷末嗎？",
             "warning": "卷末是最後一卷有特別名稱的意思，不是「卷+數字」，可能是卷末、卷尾…",
             "images": [
-                {"file": "total_number_contents_last_volume.png"}
+                {"file": "total_number_contents_last_volume.webp"}
             ],
                         "answers": [
                 { "text": "有", "next":"11"},
@@ -103,7 +103,7 @@
         "11": {
             "text": "填寫卷末數量的阿拉伯數字",
             "images": [
-                {"file": "total_number_contents_last_volume.png", "description": "這例子只有1個卷末，填「1」"}
+                {"file": "total_number_contents_last_volume.webp", "description": "這例子只有1個卷末，填「1」"}
             ],
             "answers": [
                 { "text": "填寫", "save": "2",  "next": "12", "default": "末%卷"}
@@ -112,7 +112,7 @@
         "12": {
             "text": "填寫不包含卷首和卷末卷數的阿拉伯數字",
             "images": [
-                {"file": "total_number_contents_last_volume.png", "description": "這例子可以看到在卷末前有「卷4」，填「4」"}
+                {"file": "total_number_contents_last_volume.webp", "description": "這例子可以看到在卷末前有「卷4」，填「4」"}
             ],
             "answers": [
                 { "text": "填寫", "save": "0",  "next": "13", "default": "%卷" }
@@ -121,8 +121,8 @@
         "13": {
             "text": "卷的單位有被包含在任何其他單位裡面嗎？比如:冊、輯…等",
             "images": [
-                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
-                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
+                {"file": "total_number_contents_combine_2.webp", "description": "這個的大單位是「部」，每個部裡又包含1個或多個卷"},
+                {"file": "total_number_contents_combine_3.webp", "description": "這個的大單位是「冊」，每個部裡又包含1個或多個卷"}
             ],
             "answers": [
                 { "text": "有", "next": "14"},
@@ -133,8 +133,8 @@
             "text": "填寫全部有幾個大單位",
             "warning": "比如:總共有「2冊」、「4輯」…等",
             "images": [
-                {"file": "total_number_contents_combine_2.png", "description": "這個的大單位是「部」，是中文字表示的「利部、貞部」，看他有幾部就填「數字+部」"},
-                {"file": "total_number_contents_combine_3.png", "description": "這個的大單位是「冊」，算他總共有幾冊，假設這例子就只有6冊，填「6冊」"}
+                {"file": "total_number_contents_combine_2.webp", "description": "這個的大單位是「部」，是中文字表示的「利部、貞部」，看他有幾部就填「數字+部」"},
+                {"file": "total_number_contents_combine_3.webp", "description": "這個的大單位是「冊」，算他總共有幾冊，假設這例子就只有6冊，填「6冊」"}
             ],
             "answers": [
                 { "text": "填寫", "save": "3",  "next": "15"}

@@ -11,7 +11,7 @@
         "2": { 
             "text": "在版心有看到「...堂」嗎？",
             "images": [
-                {"file": "ancestral_hall_gutter.png"}
+                {"file": "ancestral_hall_gutter.webp"}
             ],
             "answers": [
                 { "text": "有"},
@@ -21,7 +21,7 @@
         "3": { 
             "text": "在書名頁有看到「...堂」嗎？",
             "images": [
-                {"file": "ancestral_hall_1st_page.png"}
+                {"file": "ancestral_hall_1st_page.webp"}
             ],
             "answers": [
                 { "text": "有", "next": "6"},
@@ -31,7 +31,7 @@
         "4": { 
             "text": "在祠堂圖有看到「...堂」嗎？",
             "images": [
-                {"file": "ancestral_hall_painting.png"}
+                {"file": "ancestral_hall_painting.webp"}
             ],
             "answers": [
                 { "text": "有"},

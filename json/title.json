@@ -4,12 +4,12 @@
             "text": "依序看封面、書名頁、版心的譜名並選擇其中最有辨識度的或說資訊最多的",
             "warning": "如果都很有辨識度的話依順序選擇封面>書名頁>版心",
             "images": [
-                {"file": "title_cover_common.png", "description": "封面沒辨識度的譜名"},
-                {"file": "title_cover_special.png", "description": "封面有辨識度的譜名"},
-                {"file": "title_1st_common.png", "description": "書名頁沒辨識度的譜名"},
-                {"file": "title_1st_special.png", "description": "書名頁有辨識度的譜名"},
-                {"file": "title_heart_common.png", "description": "版心沒辨識度的譜名"},
-                {"file": "title_heart_special.png", "description": "版心有辨識度的譜名"}
+                {"file": "title_cover_common.webp", "description": "封面沒辨識度的譜名"},
+                {"file": "title_cover_special.webp", "description": "封面有辨識度的譜名"},
+                {"file": "title_1st_common.webp", "description": "書名頁沒辨識度的譜名"},
+                {"file": "title_1st_special.webp", "description": "書名頁有辨識度的譜名"},
+                {"file": "title_heart_common.webp", "description": "版心沒辨識度的譜名"},
+                {"file": "title_heart_special.webp", "description": "版心有辨識度的譜名"}
             ],
             "answers": [
                 { "text": "封面", "next": "3"},
@@ -20,7 +20,7 @@
         "2": { 
             "text": "目錄題有譜名嗎？",
             "images": [
-                {"file": "title_contents.png", "description": "目錄題的譜名範例"}
+                {"file": "title_contents.webp", "description": "目錄題的譜名範例"}
             ],
             "answers": 
             [
@@ -31,8 +31,8 @@
         "3": { 
             "text": "封面的譜名有較小字體嗎？",
             "images": [
-                {"file": "subtitle_smaller_font_1.png"},
-                {"file": "subtitle_smaller_font_2.png"}
+                {"file": "subtitle_smaller_font_1.webp"},
+                {"file": "subtitle_smaller_font_2.webp"}
             ],
             "answers": 
             [
@@ -43,8 +43,8 @@
         "4": { 
             "text": "封面的譜名有較小字體的部份不填，只填寫大字體的部分",
             "images": [
-                {"file": "title_smaller_font_1.png"},
-                {"file": "title_smaller_font_2.png"}
+                {"file": "title_smaller_font_1.webp"},
+                {"file": "title_smaller_font_2.webp"}
             ],
             "answers": 
             [
