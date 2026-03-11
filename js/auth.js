@@ -39,6 +39,7 @@
 
   function logout() {
     clearUser();
+    localStorage.removeItem(STORAGE_KEY_LAST_ACTIVITY);
     renderUserState();
     clearTimeout(inactivityTimer);
     // optionally remove activity listeners
@@ -57,16 +58,47 @@
 
   // idle tracking --------------------------------------------------------
   const INACTIVITY_LIMIT = 60 * 60 * 1000; // 60 minutes
+  const STORAGE_KEY_LAST_ACTIVITY = 'guideLastActivity';
   let inactivityTimer = null;
 
-  function resetInactivityTimer() {
-    clearTimeout(inactivityTimer);
-    if (getCurrentUser()) {
-      inactivityTimer = setTimeout(() => {
-        alert('閒置時間過長，已自動登出');
-        logout();
-      }, INACTIVITY_LIMIT);
+  function updateLastActivityTime() {
+    localStorage.setItem(STORAGE_KEY_LAST_ACTIVITY, Date.now().toString());
+  }
+
+  function checkInactivity() {
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const lastActivity = localStorage.getItem(STORAGE_KEY_LAST_ACTIVITY);
+    if (!lastActivity) {
+      updateLastActivityTime();
+      return;
     }
+
+    const lastActivityTime = parseInt(lastActivity, 10);
+    const currentTime = Date.now();
+    const inactiveTime = currentTime - lastActivityTime;
+
+    if (inactiveTime > INACTIVITY_LIMIT) {
+      alert('閒置時間過長，已自動登出');
+      logout();
+      localStorage.removeItem(STORAGE_KEY_LAST_ACTIVITY);
+      return;
+    }
+
+    // Reset timer based on remaining time
+    const remainingTime = INACTIVITY_LIMIT - inactiveTime;
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      alert('閒置時間過長，已自動登出');
+      logout();
+      localStorage.removeItem(STORAGE_KEY_LAST_ACTIVITY);
+    }, remainingTime);
+  }
+
+  function resetInactivityTimer() {
+    updateLastActivityTime();
+    checkInactivity();
   }
 
   function registerActivityListeners() {
@@ -136,9 +168,9 @@
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
     renderUserState();
-    // if user was already logged in when page loaded, start tracking
+    // if user was already logged in when page loaded, check inactivity and start tracking
     if (getCurrentUser()) {
-      resetInactivityTimer();
+      checkInactivity();
       registerActivityListeners();
     }
   });
