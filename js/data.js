@@ -1,6 +1,11 @@
 const data = {
     "columns" : [
-        { "name": "title",
+        { "name": "internal_id",
+          "display": "內部編號",
+          "explain": "家譜封面上已有的編號，通常是機構或個人為管理而加的編號",
+          "rules": ["若沒有的話就留空"],
+          "hasGuide": false }
+        ,{ "name": "title",
           "display": "譜名",
           "explain": "家譜的書名",
           "placeIndexes": [0, 1],
@@ -101,18 +106,15 @@ const data = {
         ,{ "name": "donor",
           "display": "捐贈者",
           "explain": "贈送這本譜書的人的姓名", 
-          "placeIndexes": [0],
           "hasGuide": false }
         ,{ "name": "donor_contact",
           "display": "捐贈者聯絡方式",
           "explain": "捐贈者的聯絡方式，可能是電話、地址、社群網站…", 
           "rules": ["如有多個資訊請用「&」區隔，如「0912-345678&test@gmail」"],
-          "placeIndexes": [0],
           "hasGuide": false }
         ,{ "name": "memo",
           "display": "備註",
           "explain": "譜書需要特別注意的事情，比如:缺幾本、泡過水、有幾頁毀損…等", 
-          "placeIndexes": [0],
           "hasGuide": false }
     ]
 };

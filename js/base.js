@@ -67,7 +67,7 @@ function loadColumns() {
   let html = "";
 
   for (const col of data.columns) {
-    const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join('、 ') : allPlaces.join('、 ');
+    const places = col.placeIndexes ? col.placeIndexes.map(i => allPlaces[i]).join('、 ') : '';
     let guideHintHtml = '';
     if (col.hasGuide) {
       guideHintHtml = `<div class="guideHint">
@@ -103,7 +103,7 @@ function loadColumns() {
               <div class="content">
                   <div>
                       <p>說明：${col.explain}</p>
-                      <p>最可能出現的地方：${places}</p>
+                      ${places ? `<p>最可能出現的地方：${places}</p>` : ``}
                       ${renderRules(col.rules)}
                   </div>
                   ${guideHintHtml}
