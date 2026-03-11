@@ -5,6 +5,13 @@ header {
   padding: 10px 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #ddd;
+  gap: 15px;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 #loginBox {
@@ -401,4 +408,15 @@ button:hover {
 #answerBtn {
   text-align: center;
   margin: 20px 0;
+}
+
+#backToIndex {
+  margin: 0;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  background: #28a745;
+  color: white;
+  cursor: pointer;
 }
