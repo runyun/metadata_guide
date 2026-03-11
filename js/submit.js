@@ -29,6 +29,15 @@
         }
       } 
     });
+
+    // 處理下拉選單
+    const selects = document.querySelectorAll('#metadataList select');
+    selects.forEach(select => {
+      const key = select.id.replace(/Place$/, '');
+      if (key) {
+        data[key + '_place'] = select.value || null;
+      }
+    });
     
     return data;
   }

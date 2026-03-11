@@ -125,11 +125,31 @@ function fillFromLocalStorage() {
   const stored = JSON.parse(localStorage.getItem("guideData") || "{}");
 
   for (const key in stored) {
+    // 處理 _place 結尾的下拉選單
+    if (key.endsWith('_place')) {
+      const fieldKey = key.replace(/_place$/, '');
+      const placeSelect = document.getElementById(fieldKey + "Place");
+      if (placeSelect && stored[key]) {
+        placeSelect.value = stored[key];
+      }
+      continue;
+    }
+
+    // 處理 _page 結尾的頁碼輸入
+    if (key.endsWith('_page')) {
+      const fieldKey = key.replace(/_page$/, '');
+      const pageInput = document.getElementById(fieldKey + "Page");
+      if (pageInput && stored[key]) {
+        pageInput.value = stored[key];
+      }
+      continue;
+    }
+
     if (key === 'volumes') {
       const list = document.getElementById(key + "List");
       if (!list) continue;
       
-      const values = stored[key].value ? stored[key].value.split('&') : [];
+      const values = stored[key] ? stored[key].split('&') : [];
       const containers = list.querySelectorAll('.volume-input-container');
       
       // 移除現有的輸入框，除了第一個
@@ -149,15 +169,11 @@ function fillFromLocalStorage() {
         newContainers[newContainers.length - 1].querySelector('input').value = values[i];
       }
     } else {
+      // 處理其他輸入框
       const input = document.getElementById(key + "Result");
-      if (input) {
-        input.value = stored[key].value || ""; 
+      if (input && stored[key]) {
+        input.value = stored[key];
       }
-    }
-
-    const pageInput = document.getElementById(key + "Page");
-    if (pageInput) {
-      pageInput.value = stored[key].page || "";
     }
   }
 }
@@ -166,6 +182,11 @@ function setFormEditable(editable) {
   const inputs = document.querySelectorAll('#metadataList input[type="text"]');
   inputs.forEach(input => {
     input.disabled = !editable;
+  });
+
+  const selects = document.querySelectorAll('#metadataList select');
+  selects.forEach(select => {
+    select.disabled = !editable;
   });
 
   const buttons = document.querySelectorAll('#metadataList button');
@@ -178,6 +199,11 @@ function clearAll() {
     const inputs = document.querySelectorAll('#metadataList input[type="text"]');
     inputs.forEach(input => {
         input.value = "";
+    });
+
+    const selects = document.querySelectorAll('#metadataList select');
+    selects.forEach(select => {
+        select.value = "";
     });
     
     // 清空 volumes 清單，只保留一個輸入框

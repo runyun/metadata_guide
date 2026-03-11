@@ -19,11 +19,17 @@
     for (const col of data.columns) {
       const value = metaData[col.name] || '';
       const pageValue = metaData[col.name + '_page'] || '';
+      const placeValue = metaData[col.name + '_place'] || '';
       
-      guideData[col.name] = {
-        value: value,
-        page: pageValue
-      };
+      if (value) {
+        guideData[col.name] = value;
+      }
+      if (pageValue) {
+        guideData[col.name + '_page'] = pageValue;
+      }
+      if (placeValue) {
+        guideData[col.name + '_place'] = placeValue;
+      }
     }
     return guideData;
   }
