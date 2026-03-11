@@ -5,6 +5,13 @@ header {
   padding: 10px 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #ddd;
+  gap: 15px;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 #homeContainer {
@@ -85,7 +92,7 @@ body.loading::after {
 }
 
 #backToIndex {
-    margin: 20px;
+    margin: 0;
     padding: 10px 15px;
     font-size: 14px;
     border-radius: 8px;

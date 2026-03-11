@@ -383,3 +383,22 @@ button:hover {
   background : #ffe6e6;
   color : #600;
 }
+
+/* Guide page styles */
+#typeDisplay {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#question {
+  text-align: center;
+  margin: 20px;
+  font-size: 18px;
+}
+
+#answerBtn {
+  text-align: center;
+  margin: 20px 0;
+}
